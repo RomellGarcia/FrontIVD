@@ -75,7 +75,7 @@ const GestionAtletas = () => {
   const fetchAtletas = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`https://backendivd-mbok.onrender.com/api/registros/atletas-club?clubId=${user.id}`);
+      const response = await axios.get(`http://localhost:5000/api/registros/atletas-club?clubId=${user.id}`);
       setAtletas(response.data);
       setError('');
     } catch (error) {
@@ -89,7 +89,7 @@ const GestionAtletas = () => {
   const fetchSolicitudes = async () => {
     try {
       setLoadingSolicitudes(true);
-      const response = await axios.get(`https://backendivd-mbok.onrender.com/api/registros/solicitudes-club?clubId=${user.id}`);
+      const response = await axios.get(`http://localhost:5000/api/registros/solicitudes-club?clubId=${user.id}`);
       const solicitudesPendientes = response.data.filter(s => s.estado === 'pendiente');
       setSolicitudes(solicitudesPendientes);
     } catch (error) {
@@ -102,7 +102,7 @@ const GestionAtletas = () => {
 
   const handleAceptarSolicitud = async (solicitudId) => {
     try {
-              await axios.put(`https://backendivd-mbok.onrender.com/api/registros/solicitudes-club/${solicitudId}`, { estado: 'aceptada' });
+              await axios.put(`http://localhost:5000/api/registros/solicitudes-club/${solicitudId}`, { estado: 'aceptada' });
       setError('');
       fetchSolicitudes();
       fetchAtletas();
@@ -114,7 +114,7 @@ const GestionAtletas = () => {
 
   const handleRechazarSolicitud = async (solicitudId) => {
     try {
-              await axios.put(`https://backendivd-mbok.onrender.com/api/registros/solicitudes-club/${solicitudId}`, { estado: 'rechazada' });
+              await axios.put(`http://localhost:5000/api/registros/solicitudes-club/${solicitudId}`, { estado: 'rechazada' });
       setError('');
       fetchSolicitudes();
     } catch (error) {
@@ -136,7 +136,7 @@ const GestionAtletas = () => {
   const confirmarExpulsion = async () => {
     try {
       // Desasociar atleta del club (quitar clubId)
-              await axios.put(`https://backendivd-mbok.onrender.com/api/registros/${atletaAExpulsar._id}`, {
+              await axios.put(`http://localhost:5000/api/registros/${atletaAExpulsar._id}`, {
         clubId: null
       });
       
@@ -188,7 +188,7 @@ const GestionAtletas = () => {
     try {
       setLoadingEntrenadores(true);
       console.log('Buscando entrenadores para club:', user.id);
-      const response = await axios.get(`https://backendivd-mbok.onrender.com/api/entrenadores/club/${user.id}`);
+      const response = await axios.get(`http://localhost:5000/api/entrenadores/club/${user.id}`);
       console.log('Entrenadores recibidos:', response.data);
       setEntrenadores(response.data);
     } catch (error) {
@@ -203,7 +203,7 @@ const GestionAtletas = () => {
   const fetchSolicitudesEntrenadores = async () => {
     try {
       console.log('Buscando solicitudes de entrenadores para club:', user.id);
-      const response = await axios.get(`https://backendivd-mbok.onrender.com/api/entrenadores/solicitudes-club/${user.id}`);
+      const response = await axios.get(`http://localhost:5000/api/entrenadores/solicitudes-club/${user.id}`);
       console.log('Solicitudes recibidas:', response.data);
       const solicitudesPendientes = response.data.filter(s => s.estado === 'pendiente');
       console.log('Solicitudes pendientes:', solicitudesPendientes);
@@ -217,7 +217,7 @@ const GestionAtletas = () => {
 
   const handleAceptarSolicitudEntrenador = async (solicitudId) => {
     try {
-      await axios.put(`https://backendivd-mbok.onrender.com/api/entrenadores/solicitudes/${solicitudId}`, { 
+      await axios.put(`http://localhost:5000/api/entrenadores/solicitudes/${solicitudId}`, { 
         estado: 'aceptada' 
       });
       setError('');
@@ -231,7 +231,7 @@ const GestionAtletas = () => {
 
   const handleRechazarSolicitudEntrenador = async (solicitudId) => {
     try {
-      await axios.put(`https://backendivd-mbok.onrender.com/api/entrenadores/solicitudes/${solicitudId}`, { 
+      await axios.put(`http://localhost:5000/api/entrenadores/solicitudes/${solicitudId}`, { 
         estado: 'rechazada' 
       });
       setError('');
@@ -250,7 +250,7 @@ const GestionAtletas = () => {
   const confirmarExpulsionEntrenador = async () => {
     try {
       // Desasociar entrenador del club (quitar clubId)
-      await axios.put(`https://backendivd-mbok.onrender.com/api/registros/${entrenadorAExpulsar._id}`, {
+      await axios.put(`http://localhost:5000/api/registros/${entrenadorAExpulsar._id}`, {
         clubId: null
       });
       

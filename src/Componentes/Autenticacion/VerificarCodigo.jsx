@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-const API_BASE_URL = 'https://backendivd-mbok.onrender.com';
+const API_BASE_URL = 'http://localhost:5000';
 
 const VerificarCodigo = () => {
   const [codigo, setCodigo] = useState('');

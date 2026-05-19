@@ -37,7 +37,7 @@ const GestionarAtletas = () => {
       console.log('Cargando atletas para entrenador:', user.id);
       console.log('Usuario actual:', user);
       
-      const response = await axios.get(`https://backendivd-mbok.onrender.com/api/entrenador/atletas/${user.id}`);
+      const response = await axios.get(`http://localhost:5000/api/entrenador/atletas/${user.id}`);
       console.log('Respuesta del servidor:', response.data);
       setAtletas(response.data);
     } catch (error) {

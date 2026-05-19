@@ -20,7 +20,7 @@ const Vision = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('https://backendivd-mbok.onrender.com/api/vision');
+      const response = await axios.get('http://localhost:5000/api/vision');
       const formattedVisiones = response.data.map(v => ({
         _id: v._id,
         titulo: v.titulo || '',
@@ -64,7 +64,7 @@ const Vision = () => {
       let response;
 
       if (editingId) {
-        response = await axios.put(`https://backendivd-mbok.onrender.com/api/vision/${editingId}`, payload);
+        response = await axios.put(`http://localhost:5000/api/vision/${editingId}`, payload);
         if (response.status === 200 || response.status === 201) {
           MySwal.fire({
             title: '¡Éxito!',
@@ -86,7 +86,7 @@ const Vision = () => {
           throw new Error(response.data?.message || 'Error desconocido');
         }
       } else {
-        response = await axios.post('https://backendivd-mbok.onrender.com/api/vision', payload);
+        response = await axios.post('http://localhost:5000/api/vision', payload);
         MySwal.fire({
           title: '¡Éxito!',
           text: 'Visión creada correctamente.',
@@ -136,7 +136,7 @@ const Vision = () => {
     if (result.isConfirmed) {
       setLoading(true);
       try {
-        const response = await axios.delete(`https://backendivd-mbok.onrender.com/api/vision/${id}`);
+        const response = await axios.delete(`http://localhost:5000/api/vision/${id}`);
         // Limpiar completamente el array de visiones
         setVisiones([]);
         MySwal.fire({

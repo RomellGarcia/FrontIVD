@@ -66,7 +66,7 @@ const Eventos = () => {
   const cargarEventos = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('https://backendivd-mbok.onrender.com/api/eventos');
+      const response = await axios.get('http://localhost:5000/api/eventos');
       // Filtrar solo eventos futuros o próximos
       const eventosFuturos = response.data.filter(evento => {
         const fechaEvento = new Date(evento.fecha);
@@ -99,7 +99,7 @@ const Eventos = () => {
     setLoadingParticipantes(true);
     try {
       // Obtener participantes del club en esta convocatoria específica
-              const response = await axios.get(`https://backendivd-mbok.onrender.com/api/eventos/inscripciones?eventoId=${evento._id}&convocatoriaIndex=${index}&clubId=${user.id}`);
+              const response = await axios.get(`http://localhost:5000/api/eventos/inscripciones?eventoId=${evento._id}&convocatoriaIndex=${index}&clubId=${user.id}`);
       setParticipantesClub(response.data);
     } catch (error) {
       console.error('Error al cargar participantes:', error);

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-const API_BASE_URL = 'https://backendivd-mbok.onrender.com'; // Ajusta si usas otro dominio
+const API_BASE_URL = 'http://localhost:5000'; // Ajusta si usas otro dominio
 
 const RecuperarCorreo = () => {
   const [gmail, setGmail] = useState('');

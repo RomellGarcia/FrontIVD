@@ -23,7 +23,7 @@ const Politica = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('https://backendivd-mbok.onrender.com/api/politicas');
+      const response = await axios.get('http://localhost:5000/api/politicas');
       const formattedPoliticas = response.data.map((p) => ({
         _id: p._id,
         titulo: p.titulo || '',
@@ -68,7 +68,7 @@ const Politica = () => {
       let response;
 
       if (editingId) {
-        response = await axios.put(`https://backendivd-mbok.onrender.com/api/politicas/${editingId}`, payload);
+        response = await axios.put(`http://localhost:5000/api/politicas/${editingId}`, payload);
         if (response.status === 200 || response.status === 201) {
           MySwal.fire({
             title: '¡Éxito!',
@@ -90,7 +90,7 @@ const Politica = () => {
           throw new Error(response.data?.message || 'Error desconocido');
         }
       } else {
-        response = await axios.post('https://backendivd-mbok.onrender.com/api/politicas', payload);
+        response = await axios.post('http://localhost:5000/api/politicas', payload);
         MySwal.fire({
           title: '¡Éxito!',
           text: 'Política creada correctamente.',
@@ -140,7 +140,7 @@ const Politica = () => {
     if (result.isConfirmed) {
       setLoading(true);
       try {
-        const response = await axios.delete(`https://backendivd-mbok.onrender.com/api/politicas/${id}`);
+        const response = await axios.delete(`http://localhost:5000/api/politicas/${id}`);
         // Limpiar completamente el array de políticas
         setPoliticas([]);
         MySwal.fire({

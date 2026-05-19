@@ -69,8 +69,8 @@ const GestionarAtletas = () => {
     try {
       setLoading(true);
       const [atletasRes, clubesRes] = await Promise.all([
-        axios.get('https://backendivd-mbok.onrender.com/api/registros?rol=atleta'),
-                  axios.get('https://backendivd-mbok.onrender.com/api/clubes')
+        axios.get('http://localhost:5000/api/registros?rol=atleta'),
+                  axios.get('http://localhost:5000/api/clubes')
       ]);
       setAtletas(atletasRes.data);
       setClubes(clubesRes.data);
@@ -90,7 +90,7 @@ const GestionarAtletas = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-              await axios.delete(`https://backendivd-mbok.onrender.com/api/registros/${atletaToDelete._id}`);
+              await axios.delete(`http://localhost:5000/api/registros/${atletaToDelete._id}`);
       setSuccess('Atleta eliminado correctamente');
       setOpenDeleteModal(false);
       setAtletaToDelete(null);
@@ -114,7 +114,7 @@ const GestionarAtletas = () => {
   const handleExpulsarConfirm = async () => {
     try {
       // Solo enviar clubId: null para desasociar, sin otros campos
-              await axios.put(`https://backendivd-mbok.onrender.com/api/registros/atleta/${atletaToExpulsar._id}`, {
+              await axios.put(`http://localhost:5000/api/registros/atleta/${atletaToExpulsar._id}`, {
         clubId: null
       });
       setSuccess('Atleta expulsado correctamente del club. Ahora es independiente.');

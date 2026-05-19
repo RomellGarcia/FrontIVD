@@ -81,15 +81,15 @@ const EstadisticasAtleta = () => {
       setLoading(true);
       
       // Cargar perfil del atleta
-              const perfilRes = await axios.get(`https://backendivd-mbok.onrender.com/api/registros/atleta/${user.id}`);
+              const perfilRes = await axios.get(`http://localhost:5000/api/registros/atleta/${user.id}`);
       setPerfilAtleta(perfilRes.data);
       
       // Cargar resultados del atleta
-              const resultadosRes = await axios.get(`https://backendivd-mbok.onrender.com/api/resultados/atleta/${user.id}`);
+              const resultadosRes = await axios.get(`http://localhost:5000/api/resultados/atleta/${user.id}`);
       setResultados(resultadosRes.data);
       
       // Cargar estadísticas detalladas
-              const estadisticasRes = await axios.get(`https://backendivd-mbok.onrender.com/api/resultados/estadisticas/atleta/${user.id}`);
+              const estadisticasRes = await axios.get(`http://localhost:5000/api/resultados/estadisticas/atleta/${user.id}`);
       setEstadisticas(estadisticasRes.data.estadisticas);
       
       // Calcular progreso por disciplinas

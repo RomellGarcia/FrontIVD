@@ -71,23 +71,23 @@ const GestionResultados = () => {
       setLoading(true);
       
       // Cargar eventos
-      const eventosRes = await axios.get('https://backendivd-mbok.onrender.com/api/eventos');
+      const eventosRes = await axios.get('http://localhost:5000/api/eventos');
       setEventos(eventosRes.data);
 
       // Cargar resultados existentes
-      const resultadosRes = await axios.get('https://backendivd-mbok.onrender.com/api/resultados');
+      const resultadosRes = await axios.get('http://localhost:5000/api/resultados');
       setResultados(resultadosRes.data);
       
       // Cargar atletas
-      const atletasRes = await axios.get('https://backendivd-mbok.onrender.com/api/registros?rol=atleta');
+      const atletasRes = await axios.get('http://localhost:5000/api/registros?rol=atleta');
       setAtletas(atletasRes.data);
 
       // Cargar entrenadores
-      const entrenadoresRes = await axios.get('https://backendivd-mbok.onrender.com/api/registros?rol=entrenador');
+      const entrenadoresRes = await axios.get('http://localhost:5000/api/registros?rol=entrenador');
       setEntrenadores(entrenadoresRes.data);
       
       // Cargar clubes
-      const clubesRes = await axios.get('https://backendivd-mbok.onrender.com/api/clubes');
+      const clubesRes = await axios.get('http://localhost:5000/api/clubes');
       setClubes(clubesRes.data);
       
     } catch (error) {
@@ -125,11 +125,11 @@ const GestionResultados = () => {
 
       if (editMode && resultadoSeleccionado) {
         // Actualizar resultado existente
-        await axios.put(`https://backendivd-mbok.onrender.com/api/resultados/${resultadoSeleccionado._id}`, formData);
+        await axios.put(`http://localhost:5000/api/resultados/${resultadoSeleccionado._id}`, formData);
         setSuccess('Resultado actualizado correctamente');
       } else {
         // Crear nuevo resultado
-                  await axios.post('https://backendivd-mbok.onrender.com/api/resultados', formData);
+                  await axios.post('http://localhost:5000/api/resultados', formData);
         setSuccess('Resultado creado correctamente');
       }
 
@@ -195,7 +195,7 @@ const GestionResultados = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`https://backendivd-mbok.onrender.com/api/resultados/${resultadoId}`);
+        await axios.delete(`http://localhost:5000/api/resultados/${resultadoId}`);
         await cargarDatos();
         setSuccess('Resultado eliminado correctamente');
         

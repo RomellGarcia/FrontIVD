@@ -22,7 +22,7 @@ const { Footer } = Layout;
 const { Text, Title } = Typography;
 
 // URL base del backend
-const API_BASE_URL = 'https://backendivd-mbok.onrender.com';
+const API_BASE_URL = 'http://localhost:5000';
 
 // URL de geocodificación de Nominatim (OpenStreetMap)
 const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search';

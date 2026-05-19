@@ -59,7 +59,7 @@ const GestionAtletas = () => {
 
   const fetchAtletas = async () => {
     try {
-      let url = 'https://backendivd-mbok.onrender.com/api/registros/atletas';
+      let url = 'http://localhost:5000/api/registros/atletas';
       if (verIndependientes) {
         url += '?independientes=true';
       } else if (filtroClub) {
@@ -76,7 +76,7 @@ const GestionAtletas = () => {
 
   const fetchClubes = async () => {
     try {
-      const response = await axios.get('https://backendivd-mbok.onrender.com/api/registros/clubes');
+      const response = await axios.get('http://localhost:5000/api/registros/clubes');
       setClubes(response.data);
     } catch (error) {
       console.error('Error al obtener clubes:', error);
@@ -140,11 +140,11 @@ const GestionAtletas = () => {
 
     try {
       if (editingId) {
-        await axios.put(`https://backendivd-mbok.onrender.com/api/atletas/${editingId}`, formDataToSend, {
+        await axios.put(`http://localhost:5000/api/atletas/${editingId}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       } else {
-        await axios.post('https://backendivd-mbok.onrender.com/api/atletas', formDataToSend, {
+        await axios.post('http://localhost:5000/api/atletas', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
@@ -160,7 +160,7 @@ const GestionAtletas = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Está seguro de que desea eliminar este atleta?')) {
       try {
-        await axios.delete(`https://backendivd-mbok.onrender.com/api/atletas/${id}`);
+        await axios.delete(`http://localhost:5000/api/atletas/${id}`);
         fetchAtletas();
         setErrorMessage('');
       } catch (error) {

@@ -60,7 +60,7 @@ const PerfilEntrenador = () => {
       console.log('Cargando perfil para usuario:', user);
       
       const userId = user._id || user.id;
-      const response = await axios.get(`https://backendivd-mbok.onrender.com/api/entrenador/perfil/${userId}`);
+      const response = await axios.get(`http://localhost:5000/api/entrenador/perfil/${userId}`);
       
       console.log('Respuesta del servidor:', response.data);
       
@@ -134,7 +134,7 @@ const PerfilEntrenador = () => {
       console.log('Enviando datos actualizados:', perfilData);
       
       const userId = user._id || user.id;
-      const response = await axios.put(`https://backendivd-mbok.onrender.com/api/entrenador/perfil/${userId}`, perfilData);
+      const response = await axios.put(`http://localhost:5000/api/entrenador/perfil/${userId}`, perfilData);
       
       console.log('Respuesta del servidor:', response.data);
       

@@ -60,12 +60,12 @@ const PerfilAtleta = () => {
       // Intentar primero con el endpoint de atleta específico
       let response;
       try {
-        response = await axios.get(`https://backendivd-mbok.onrender.com/api/registros/atleta/${user.id}`);
+        response = await axios.get(`http://localhost:5000/api/registros/atleta/${user.id}`);
         console.log('Profile data received:', response.data);
       } catch (error) {
         console.log('First endpoint failed, trying general endpoint');
         // Si falla, intentar con el endpoint general
-                  response = await axios.get(`https://backendivd-mbok.onrender.com/api/registros/${user.id}`);
+                  response = await axios.get(`http://localhost:5000/api/registros/${user.id}`);
         console.log('Profile data from general endpoint:', response.data);
       }
       
@@ -85,7 +85,7 @@ const PerfilAtleta = () => {
 
   const fetchClubes = async () => {
     try {
-              const response = await axios.get('https://backendivd-mbok.onrender.com/api/registros/clubes');
+              const response = await axios.get('http://localhost:5000/api/registros/clubes');
       setClubes(response.data);
     } catch {
       setClubes([]);
@@ -95,7 +95,7 @@ const PerfilAtleta = () => {
   const fetchSolicitud = async () => {
     try {
       if (!user?.id) return;
-              const response = await axios.get(`https://backendivd-mbok.onrender.com/api/registros/solicitudes-club?atletaId=${user.id}`);
+              const response = await axios.get(`http://localhost:5000/api/registros/solicitudes-club?atletaId=${user.id}`);
       // Solo mostrar la última pendiente
       const pendientes = response.data.filter(s => s.estado === 'pendiente');
       setSolicitud(pendientes.length > 0 ? pendientes[0] : null);
@@ -145,12 +145,12 @@ const PerfilAtleta = () => {
       
       // Intentar primero con el endpoint de atleta específico
       try {
-                  await axios.put(`https://backendivd-mbok.onrender.com/api/registros/atleta/${user.id}`, perfilToSave);
+                  await axios.put(`http://localhost:5000/api/registros/atleta/${user.id}`, perfilToSave);
         console.log('Profile updated successfully');
       } catch (error) {
         console.log('First endpoint failed, trying general endpoint');
         // Si falla, intentar con el endpoint general
-                  await axios.put(`https://backendivd-mbok.onrender.com/api/registros/${user.id}`, perfilToSave);
+                  await axios.put(`http://localhost:5000/api/registros/${user.id}`, perfilToSave);
         console.log('Profile updated from general endpoint');
       }
       
@@ -169,12 +169,12 @@ const PerfilAtleta = () => {
     try {
       if (!user?.id) return;
       if (solicitudIndependiente) {
-        await axios.post('https://backendivd-mbok.onrender.com/api/registros/solicitudes-club', {
+        await axios.post('http://localhost:5000/api/registros/solicitudes-club', {
           atletaId: user.id,
           tipo: 'independiente',
         });
       } else if (solicitudClubId) {
-        await axios.post('https://backendivd-mbok.onrender.com/api/registros/solicitudes-club', {
+        await axios.post('http://localhost:5000/api/registros/solicitudes-club', {
           atletaId: user.id,
           clubId: solicitudClubId,
           tipo: 'asociar',
@@ -192,7 +192,7 @@ const PerfilAtleta = () => {
   const handleEnviarSolicitud = async () => {
     try {
       if (!user?.id) return;
-      await axios.post('https://backendivd-mbok.onrender.com/api/registros/solicitudes-club', {
+      await axios.post('http://localhost:5000/api/registros/solicitudes-club', {
         atletaId: user.id,
         clubId: clubSeleccionado,
         tipo: 'asociar',
@@ -222,7 +222,7 @@ const PerfilAtleta = () => {
       if (result.isConfirmed) {
         // Salir del club actual
         try {
-          await axios.put(`https://backendivd-mbok.onrender.com/api/registros/atleta/${user.id}`, {
+          await axios.put(`http://localhost:5000/api/registros/atleta/${user.id}`, {
             clubId: null,
             fechaIngresoClub: null
           });
@@ -230,7 +230,7 @@ const PerfilAtleta = () => {
         } catch (error) {
           console.log('First endpoint failed, trying general endpoint');
           // Si falla, intentar con el endpoint general
-          await axios.put(`https://backendivd-mbok.onrender.com/api/registros/${user.id}`, {
+          await axios.put(`http://localhost:5000/api/registros/${user.id}`, {
             clubId: null,
             fechaIngresoClub: null
           });
@@ -472,7 +472,7 @@ const PerfilAtleta = () => {
                     limpiarMensaje(); // Limpiar mensajes anteriores
                     setMensaje(''); // Limpiar mensaje de info
                     
-                                      await axios.post('https://backendivd-mbok.onrender.com/api/registros/solicitudes-club', {
+                                      await axios.post('http://localhost:5000/api/registros/solicitudes-club', {
                     atletaId: user.id,
                     clubId: clubSeleccionado,
                     tipo: 'asociar',

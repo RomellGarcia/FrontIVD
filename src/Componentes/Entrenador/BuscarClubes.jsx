@@ -34,7 +34,7 @@ const BuscarClubes = () => {
   const cargarClubes = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('https://backendivd-mbok.onrender.com/api/clubes');
+      const response = await axios.get('http://localhost:5000/api/clubes');
       setClubes(response.data);
     } catch (error) {
       console.error('Error al cargar clubes:', error);
@@ -46,7 +46,7 @@ const BuscarClubes = () => {
 
   const cargarSolicitudesEnviadas = async () => {
     try {
-      const response = await axios.get(`https://backendivd-mbok.onrender.com/api/entrenador/solicitudes/${user.id}`);
+      const response = await axios.get(`http://localhost:5000/api/entrenador/solicitudes/${user.id}`);
       setSolicitudesEnviadas(response.data);
     } catch (error) {
       console.error('Error al cargar solicitudes:', error);
@@ -69,7 +69,7 @@ const BuscarClubes = () => {
       console.log('Tipo de user.id:', typeof user.id);
       console.log('Tipo de selectedClub._id:', typeof selectedClub._id);
 
-      const response = await axios.post('https://backendivd-mbok.onrender.com/api/entrenador/solicitar-club', {
+      const response = await axios.post('http://localhost:5000/api/entrenador/solicitar-club', {
         entrenadorId: user.id,
         clubId: selectedClub._id,
         mensaje: mensajeSolicitud
@@ -155,7 +155,7 @@ const BuscarClubes = () => {
             variant="outlined"
             onClick={async () => {
               try {
-                const response = await axios.get('https://backendivd-mbok.onrender.com/api/entrenadores/test');
+                const response = await axios.get('http://localhost:5000/api/entrenadores/test');
                 console.log('Test response:', response.data);
                 Swal.fire({
                   icon: 'info',
@@ -299,7 +299,7 @@ const BuscarClubes = () => {
              <Button 
                onClick={async () => {
                  try {
-                   const response = await axios.post('https://backendivd-mbok.onrender.com/api/entrenador/verificar-datos', {
+                   const response = await axios.post('http://localhost:5000/api/entrenador/verificar-datos', {
                      entrenadorId: user.id,
                      clubId: selectedClub._id
                    });

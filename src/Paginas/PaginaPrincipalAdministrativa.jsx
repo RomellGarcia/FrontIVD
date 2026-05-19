@@ -70,10 +70,10 @@ const PaginaPrincipalAdministrativa = () => {
       
       // Cargar estadísticas generales
       const [atletasRes, clubesRes, eventosRes, resultadosRes] = await Promise.all([
-        axios.get('https://backendivd-mbok.onrender.com/api/registros?rol=atleta'),
-                  axios.get('https://backendivd-mbok.onrender.com/api/clubes'),
-                  axios.get('https://backendivd-mbok.onrender.com/api/eventos'),
-                  axios.get('https://backendivd-mbok.onrender.com/api/resultados')
+        axios.get('http://localhost:5000/api/registros?rol=atleta'),
+                  axios.get('http://localhost:5000/api/clubes'),
+                  axios.get('http://localhost:5000/api/eventos'),
+                  axios.get('http://localhost:5000/api/resultados')
       ]);
 
       const atletas = atletasRes.data;

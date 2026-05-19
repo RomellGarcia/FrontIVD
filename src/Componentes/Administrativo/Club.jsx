@@ -48,7 +48,7 @@ const GestionClubes = () => {
 
   const fetchClubes = async () => {
     try {
-      const response = await axios.get('https://backendivd-mbok.onrender.com/api/clubes');
+      const response = await axios.get('http://localhost:5000/api/clubes');
       const clubesData = response.data.map(club => {
         let imagenParsed = null;
         try {
@@ -129,11 +129,11 @@ const GestionClubes = () => {
 
     try {
       if (editingId) {
-        await axios.put(`https://backendivd-mbok.onrender.com/api/clubes/${editingId}`, formDataToSend, {
+        await axios.put(`http://localhost:5000/api/clubes/${editingId}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       } else {
-                  await axios.post('https://backendivd-mbok.onrender.com/api/clubes', formDataToSend, {
+                  await axios.post('http://localhost:5000/api/clubes', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
@@ -149,7 +149,7 @@ const GestionClubes = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Está seguro de que desea eliminar este club?')) {
       try {
-        await axios.delete(`https://backendivd-mbok.onrender.com/api/clubes/${id}`);
+        await axios.delete(`http://localhost:5000/api/clubes/${id}`);
         fetchClubes();
         setErrorMessage('');
       } catch (error) {

@@ -44,7 +44,7 @@ const PerfilClub = () => {
   const fetchClubData = async () => {
     try {
       setLoading(true);
-              const response = await axios.get(`https://backendivd-mbok.onrender.com/api/clubes/${user.id}`);
+              const response = await axios.get(`http://localhost:5000/api/clubes/${user.id}`);
       const data = response.data;
       setClubData({
         nombre: data.nombre || '',
@@ -112,10 +112,10 @@ const PerfilClub = () => {
       }
 
       // Obtener datos actuales del club para mantener campos no editables
-              const clubActual = await axios.get(`https://backendivd-mbok.onrender.com/api/clubes/${user.id}`);
+              const clubActual = await axios.get(`http://localhost:5000/api/clubes/${user.id}`);
       const datosActuales = clubActual.data;
 
-              await axios.put(`https://backendivd-mbok.onrender.com/api/clubes/${user.id}`, {
+              await axios.put(`http://localhost:5000/api/clubes/${user.id}`, {
         nombre: clubData.nombre.trim(),
         direccion: datosActuales.direccion || '', // Mantener dirección existente
         telefono: clubData.telefono.trim(),

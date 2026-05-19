@@ -57,7 +57,7 @@ const EventosAtleta = () => {
       setLoading(true);
       setErrorMessage('');
       
-      const response = await axios.get('https://backendivd-mbok.onrender.com/api/eventos');
+      const response = await axios.get('http://localhost:5000/api/eventos');
       const fechaActual = new Date();
       const eventosFuturos = response.data.filter(evento => new Date(evento.fecha) > fechaActual);
       setEventos(eventosFuturos || []);
@@ -71,7 +71,7 @@ const EventosAtleta = () => {
 
   const fetchInscripciones = async () => {
     try {
-      const response = await axios.get(`https://backendivd-mbok.onrender.com/api/eventos/inscripciones?atletaId=${user.id}`);
+      const response = await axios.get(`http://localhost:5000/api/eventos/inscripciones?atletaId=${user.id}`);
       setInscripciones(response.data || []);
     } catch (error) {
       console.error('Error al obtener inscripciones:', error);
@@ -117,7 +117,7 @@ const EventosAtleta = () => {
         }
       };
 
-      const response = await axios.post('https://backendivd-mbok.onrender.com/api/eventos/inscripciones', inscripcionData);
+      const response = await axios.post('http://localhost:5000/api/eventos/inscripciones', inscripcionData);
       
       setSnackbar({
         open: true,

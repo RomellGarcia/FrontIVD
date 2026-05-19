@@ -95,7 +95,7 @@ const RegistroEntrenador = () => {
 
   const cargarClubes = async () => {
     try {
-      const response = await axios.get('https://backendivd-mbok.onrender.com/api/clubes');
+      const response = await axios.get('http://localhost:5000/api/clubes');
       setClubes(response.data);
     } catch (error) {
       console.error('Error al cargar clubes:', error);
@@ -186,7 +186,7 @@ const RegistroEntrenador = () => {
         delete entrenadorData.clubId;
       }
 
-              await axios.post('https://backendivd-mbok.onrender.com/api/registros', entrenadorData);
+              await axios.post('http://localhost:5000/api/registros', entrenadorData);
       
       setSuccess('Entrenador registrado correctamente');
       setTimeout(() => {

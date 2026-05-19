@@ -14,7 +14,7 @@ const EncabezadoPublico = () => {
   useEffect(() => {
     const fetchPerfil = async () => {
       try {
-        const response = await axios.get('https://backendivd-mbok.onrender.com/api/perfilEmpresa');
+        const response = await axios.get('http://localhost:5000/api/perfilEmpresa');
         const data = response.data;
         setNombreEmpresa(data.nombreEmpresa || 'Instituto Veracruzano del Deporte');
         setLogoUrl(data.logo || '');

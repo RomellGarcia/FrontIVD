@@ -58,7 +58,7 @@ const ResultadosAtleta = () => {
   const fetchResultados = async () => {
     try {
       setLoading(true);
-              const response = await axios.get(`https://backendivd-mbok.onrender.com/api/resultados/atleta/${user.id}`);
+              const response = await axios.get(`http://localhost:5000/api/resultados/atleta/${user.id}`);
       const sortedResultados = response.data.sort((a, b) => new Date(b.fechaEvento) - new Date(a.fechaEvento));
       setResultados(sortedResultados);
       setErrorMessage('');
@@ -72,7 +72,7 @@ const ResultadosAtleta = () => {
 
   const fetchLogo = async () => {
     try {
-              const response = await axios.get('https://backendivd-mbok.onrender.com/api/configuracion/logo');
+              const response = await axios.get('http://localhost:5000/api/configuracion/logo');
       if (response.data && response.data.logoUrl) {
         console.log('✅ Logo cargado exitosamente:', response.data.logoUrl);
         setLogoUrl(response.data.logoUrl);

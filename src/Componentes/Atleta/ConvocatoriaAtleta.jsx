@@ -125,7 +125,7 @@ const ConvocatoriasAtleta = () => {
       
       console.log('🔍 Buscando convocatorias para:', { edad, genero });
       
-      const response = await axios.get(`https://backendivd-mbok.onrender.com/api/eventos/convocatorias-para-atleta?edad=${edad}&genero=${genero}`);
+      const response = await axios.get(`http://localhost:5000/api/eventos/convocatorias-para-atleta?edad=${edad}&genero=${genero}`);
       
       console.log('📋 Convocatorias encontradas:', response.data);
       
@@ -151,7 +151,7 @@ const ConvocatoriasAtleta = () => {
   // Función para cargar logo
   const fetchLogo = async () => {
     try {
-      const response = await axios.get('https://backendivd-mbok.onrender.com/api/perfilEmpresa');
+      const response = await axios.get('http://localhost:5000/api/perfilEmpresa');
       setLogoUrl(response.data.logo || '');
     } catch (error) {
       setLogoUrl('');
@@ -162,7 +162,7 @@ const ConvocatoriasAtleta = () => {
   const fetchInscripciones = async () => {
     try {
       if (!user?.id) return;
-      const response = await axios.get(`https://backendivd-mbok.onrender.com/api/eventos/inscripciones?atletaId=${user.id}`);
+      const response = await axios.get(`http://localhost:5000/api/eventos/inscripciones?atletaId=${user.id}`);
       setYaInscritos(response.data.map(i => i.eventoId));
     } catch (error) {
       setYaInscritos([]);
@@ -217,7 +217,7 @@ const ConvocatoriasAtleta = () => {
 
     setInscribiendo(true);
     try {
-      const response = await axios.post('https://backendivd-mbok.onrender.com/api/eventos/inscripciones', {
+      const response = await axios.post('http://localhost:5000/api/eventos/inscripciones', {
         eventoId: convocatoriaSeleccionada._id,
         atletaId: user.id,
         datosAtleta: {

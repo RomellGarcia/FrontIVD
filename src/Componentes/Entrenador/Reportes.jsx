@@ -44,7 +44,7 @@ const ReportesEntrenador = () => {
       console.log('🔍 Usuario:', user);
       
       // Obtener resultados de los atletas asignados al entrenador
-      const response = await axios.get(`https://backendivd-mbok.onrender.com/api/resultados/entrenador/${user.id}`);
+      const response = await axios.get(`http://localhost:5000/api/resultados/entrenador/${user.id}`);
       console.log('📊 Respuesta de la API:', response.data);
       
       const sortedResultados = response.data.sort((a, b) => new Date(b.fechaEvento) - new Date(a.fechaEvento));
@@ -68,7 +68,7 @@ const ReportesEntrenador = () => {
 
   const fetchLogo = async () => {
     try {
-              const response = await axios.get('https://backendivd-mbok.onrender.com/api/configuracion/logo');
+              const response = await axios.get('http://localhost:5000/api/configuracion/logo');
       if (response.data && response.data.logoUrl) {
         console.log('✅ Logo cargado exitosamente:', response.data.logoUrl);
         setLogoUrl(response.data.logoUrl);

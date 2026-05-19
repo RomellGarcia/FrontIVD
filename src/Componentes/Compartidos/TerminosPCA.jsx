@@ -42,7 +42,7 @@ const theme = createTheme({
 });
 
 // URL base del backend (ajustada al puerto 5000 del CRUD)
-  const API_BASE_URL = "https://backendivd-mbok.onrender.com";
+  const API_BASE_URL = "http://localhost:5000";
 
 function TerminosPCA() {
   const [terminos, setTerminos] = useState([]);

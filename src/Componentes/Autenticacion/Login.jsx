@@ -10,7 +10,7 @@ import { TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@m
 const MySwal = withReactContent(Swal);
 
 // URL base del backend
-const API_BASE_URL = "https://backendivd-mbok.onrender.com";
+const API_BASE_URL = "http://localhost:5000";
 
 function Login() {
   const navigate = useNavigate();

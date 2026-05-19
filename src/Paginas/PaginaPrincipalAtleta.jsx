@@ -89,13 +89,13 @@ const PaginaPrincipalAtleta = () => {
       console.log('Cargando datos para atleta:', userId);
 
       // Cargar datos del atleta
-              const atletaResponse = await axios.get(`https://backendivd-mbok.onrender.com/api/registros/atleta/${userId}`);
+              const atletaResponse = await axios.get(`http://localhost:5000/api/registros/atleta/${userId}`);
       console.log('Datos del atleta:', atletaResponse.data);
       setAtletaData(atletaResponse.data);
 
       // Cargar clubes disponibles
       try {
-        const clubesResponse = await axios.get('https://backendivd-mbok.onrender.com/api/registros/clubes');
+        const clubesResponse = await axios.get('http://localhost:5000/api/registros/clubes');
         console.log('Clubes cargados:', clubesResponse.data.length);
         setClubesDisponibles(clubesResponse.data.slice(0, 6));
       } catch (error) {
@@ -111,7 +111,7 @@ const PaginaPrincipalAtleta = () => {
         console.log('Edad y género del atleta:', { edad, genero });
         
         if (edad && genero) {
-          const eventosResponse = await axios.get(`https://backendivd-mbok.onrender.com/api/eventos/convocatorias-para-atleta?edad=${edad}&genero=${genero}`);
+          const eventosResponse = await axios.get(`http://localhost:5000/api/eventos/convocatorias-para-atleta?edad=${edad}&genero=${genero}`);
           console.log('Eventos próximos cargados:', eventosResponse.data.length);
           setEventosProximos(eventosResponse.data.slice(0, 4));
         } else {
@@ -125,7 +125,7 @@ const PaginaPrincipalAtleta = () => {
 
       // Cargar eventos en los que participa
       try {
-        const participacionResponse = await axios.get(`https://backendivd-mbok.onrender.com/api/eventos/inscripciones?atletaId=${userId}`);
+        const participacionResponse = await axios.get(`http://localhost:5000/api/eventos/inscripciones?atletaId=${userId}`);
         console.log('Participaciones cargadas:', participacionResponse.data.length);
         setEventosParticipacion(participacionResponse.data.slice(0, 3));
       } catch (error) {

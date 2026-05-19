@@ -49,23 +49,23 @@ const Reportes = () => {
       setLoading(true);
       
       // Cargar resultados
-      const resultadosRes = await axios.get('https://backendivd-mbok.onrender.com/api/resultados');
+      const resultadosRes = await axios.get('http://localhost:5000/api/resultados');
       setResultados(resultadosRes.data);
       
       // Cargar eventos
-      const eventosRes = await axios.get('https://backendivd-mbok.onrender.com/api/eventos');
+      const eventosRes = await axios.get('http://localhost:5000/api/eventos');
       setEventos(eventosRes.data);
       
       // Cargar atletas
-      const atletasRes = await axios.get('https://backendivd-mbok.onrender.com/api/registros?rol=atleta');
+      const atletasRes = await axios.get('http://localhost:5000/api/registros?rol=atleta');
       setAtletas(atletasRes.data);
       
       // Cargar clubes
-      const clubesRes = await axios.get('https://backendivd-mbok.onrender.com/api/clubes');
+      const clubesRes = await axios.get('http://localhost:5000/api/clubes');
       setClubes(clubesRes.data);
       
       // Cargar estadísticas
-      const estadisticasRes = await axios.get('https://backendivd-mbok.onrender.com/api/resultados/estadisticas/generales');
+      const estadisticasRes = await axios.get('http://localhost:5000/api/resultados/estadisticas/generales');
       setEstadisticas(estadisticasRes.data);
       
     } catch (error) {

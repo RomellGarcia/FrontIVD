@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
-const API_BASE_URL = 'https://backendivd-mbok.onrender.com';
+const API_BASE_URL = 'http://localhost:5000';
 
 const RestablecerPassword = () => {
   const [newPassword, setNewPassword] = useState('');

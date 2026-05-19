@@ -18,7 +18,7 @@ const EncabezadoAdministrativo = () => {
   useEffect(() => {
     const fetchPerfil = async () => {
       try {
-        const response = await axios.get('https://backendivd-mbok.onrender.com/api/perfilEmpresa');
+        const response = await axios.get('http://localhost:5000/api/perfilEmpresa');
         const data = response.data;
 
         console.log('Datos recibidos del backend:', data); // Depuración

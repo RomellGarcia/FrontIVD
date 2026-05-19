@@ -60,12 +60,12 @@ const PaginaPrincipalEntrenador = () => {
       
       // Cargar información del club si está asignado
       if (user.clubId) {
-        const clubResponse = await axios.get(`https://backendivd-mbok.onrender.com/api/clubes/${user.clubId}`);
+        const clubResponse = await axios.get(`http://localhost:5000/api/clubes/${user.clubId}`);
         setClubInfo(clubResponse.data);
         
         // Cargar atletas del club asignado
         try {
-          const atletasResponse = await axios.get(`https://backendivd-mbok.onrender.com/api/registros/atletas-club?clubId=${user.clubId}`);
+          const atletasResponse = await axios.get(`http://localhost:5000/api/registros/atletas-club?clubId=${user.clubId}`);
           setAtletasClub(atletasResponse.data);
           // Contar atletas activos (que tengan estado activo o similar)
           const atletasActivos = atletasResponse.data.filter(atleta => 
@@ -80,7 +80,7 @@ const PaginaPrincipalEntrenador = () => {
 
       // Cargar eventos próximos
       try {
-        const eventosResponse = await axios.get('https://backendivd-mbok.onrender.com/api/eventos');
+        const eventosResponse = await axios.get('http://localhost:5000/api/eventos');
         const eventosFuturos = eventosResponse.data.filter(evento => {
           const fechaEvento = new Date(evento.fecha);
           const fechaActual = new Date();
@@ -93,7 +93,7 @@ const PaginaPrincipalEntrenador = () => {
       }
 
       // Cargar actividad reciente
-              const activityResponse = await axios.get(`https://backendivd-mbok.onrender.com/api/entrenador/activity/${user.id}`);
+              const activityResponse = await axios.get(`http://localhost:5000/api/entrenador/activity/${user.id}`);
       setRecentActivity(activityResponse.data);
 
     } catch (error) {

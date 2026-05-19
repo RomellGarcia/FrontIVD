@@ -92,15 +92,15 @@ const ValidacionCategoriaAutomatica = () => {
       setLoading(true);
       
       // Cargar atletas
-      const atletasRes = await axios.get('https://backendivd-mbok.onrender.com/api/registros?rol=atleta');
+      const atletasRes = await axios.get('http://localhost:5000/api/registros?rol=atleta');
       setAtletas(atletasRes.data);
       
       // Cargar eventos
-      const eventosRes = await axios.get('https://backendivd-mbok.onrender.com/api/eventos');
+      const eventosRes = await axios.get('http://localhost:5000/api/eventos');
       setEventos(eventosRes.data);
       
       // Cargar inscripciones
-      const inscripcionesRes = await axios.get('https://backendivd-mbok.onrender.com/api/eventos/inscripciones');
+      const inscripcionesRes = await axios.get('http://localhost:5000/api/eventos/inscripciones');
       setInscripciones(inscripcionesRes.data);
       
       // Realizar validaciones automáticas

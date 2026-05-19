@@ -93,7 +93,7 @@ const GestionClubes = () => {
   const cargarClubes = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('https://backendivd-mbok.onrender.com/api/clubes');
+      const response = await axios.get('http://localhost:5000/api/clubes');
       setClubes(response.data);
       setError('');
     } catch (error) {
@@ -137,7 +137,7 @@ const GestionClubes = () => {
         return;
       }
 
-              await axios.put(`https://backendivd-mbok.onrender.com/api/clubes/${selectedClub._id}`, formData);
+              await axios.put(`http://localhost:5000/api/clubes/${selectedClub._id}`, formData);
       setSuccess('Información del club actualizada correctamente');
       handleCloseModal();
       cargarClubes();
@@ -155,7 +155,7 @@ const GestionClubes = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-              await axios.delete(`https://backendivd-mbok.onrender.com/api/clubes/${clubToDelete._id}`);
+              await axios.delete(`http://localhost:5000/api/clubes/${clubToDelete._id}`);
       setSuccess('Club eliminado correctamente');
       setOpenDeleteModal(false);
       setClubToDelete(null);
@@ -177,7 +177,7 @@ const GestionClubes = () => {
 
   const cargarAtletasClub = async (clubId) => {
     try {
-      const response = await axios.get(`https://backendivd-mbok.onrender.com/api/registros/atletas-club?clubId=${clubId}`);
+      const response = await axios.get(`http://localhost:5000/api/registros/atletas-club?clubId=${clubId}`);
       setAtletasClub(response.data);
     } catch (error) {
       console.error('Error al cargar atletas del club:', error);

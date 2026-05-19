@@ -50,7 +50,7 @@ const EventosEntrenador = () => {
   const cargarEventos = async () => {
     try {
       setLoadingEventos(true);
-      const response = await axios.get('https://backendivd-mbok.onrender.com/api/eventos');
+      const response = await axios.get('http://localhost:5000/api/eventos');
       setEventos(response.data || []);
     } catch (error) {
       console.error('Error al cargar eventos:', error);
@@ -74,7 +74,7 @@ const EventosEntrenador = () => {
     setModalParticipantesOpen(true);
     setLoadingParticipantes(true);
     try {
-              const response = await axios.get(`https://backendivd-mbok.onrender.com/api/eventos/inscripciones?eventoId=${evento._id}&convocatoriaIndex=${index}`);
+              const response = await axios.get(`http://localhost:5000/api/eventos/inscripciones?eventoId=${evento._id}&convocatoriaIndex=${index}`);
       setParticipantes(response.data);
     } catch (error) {
       setParticipantes([]);

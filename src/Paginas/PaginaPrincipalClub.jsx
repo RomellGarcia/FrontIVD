@@ -64,19 +64,19 @@ const PaginaPrincipalClub = () => {
       setLoading(true);
       
       // Cargar información del club
-              const clubRes = await axios.get(`https://backendivd-mbok.onrender.com/api/clubes/${user.id}`);
+              const clubRes = await axios.get(`http://localhost:5000/api/clubes/${user.id}`);
       setClub(clubRes.data);
       
       // Cargar atletas recién ingresados (últimos 5)
-              const atletasRes = await axios.get(`https://backendivd-mbok.onrender.com/api/registros/atletas-club?clubId=${user.id}&limit=5&sort=createdAt`);
+              const atletasRes = await axios.get(`http://localhost:5000/api/registros/atletas-club?clubId=${user.id}&limit=5&sort=createdAt`);
       setAtletasRecientes(atletasRes.data);
       
       // Cargar eventos recientes (últimos 5)
-              const eventosRes = await axios.get(`https://backendivd-mbok.onrender.com/api/eventos?limit=5`);
+              const eventosRes = await axios.get(`http://localhost:5000/api/eventos?limit=5`);
       setEventosRecientes(eventosRes.data);
       
       // Cargar estadísticas del club
-              const estadisticasRes = await axios.get(`https://backendivd-mbok.onrender.com/api/resultados?clubId=${user.id}`);
+              const estadisticasRes = await axios.get(`http://localhost:5000/api/resultados?clubId=${user.id}`);
       calcularEstadisticas(atletasRes.data, estadisticasRes.data);
       
     } catch (error) {
