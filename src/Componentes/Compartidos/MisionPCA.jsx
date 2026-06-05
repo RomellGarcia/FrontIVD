@@ -54,7 +54,7 @@ function MisionPCA() {
   useEffect(() => {
     const fetchMision = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/mision`);
+        const response = await axios.get(`${API_BASE_URL}/api/contenido/mision`);
         // Solo mostrar la misión más reciente (la primera del array ordenado por fecha)
         const misionesData = Array.isArray(response.data) ? response.data : [response.data];
         // Tomar solo la primera misión (la más reciente)

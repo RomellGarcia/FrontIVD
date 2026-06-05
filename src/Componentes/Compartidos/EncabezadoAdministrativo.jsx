@@ -1,3 +1,4 @@
+import { perfilEmpresaAPI } from '../../api.js';
 import React, { useState, useRef, useEffect } from 'react';
 import { AppstoreOutlined, LogoutOutlined, HomeOutlined, FileTextOutlined, TeamOutlined, ShopOutlined, ApartmentOutlined, TrophyOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -18,12 +19,12 @@ const EncabezadoAdministrativo = () => {
   useEffect(() => {
     const fetchPerfil = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/perfilEmpresa');
+        const response = await axios.get('http://localhost:5000/api/perfil-empresa');
         const data = response.data;
 
         console.log('Datos recibidos del backend:', data); // Depuración
 
-        setNombreEmpresa(data.nombreEmpresa || 'Nombre no disponible');
+        setNombreEmpresa(data.nombre_empresa || 'Nombre no disponible');
         setLogoUrl(data.logo || '');
       } catch (error) {
         console.error('Error al obtener datos del perfil:', error);

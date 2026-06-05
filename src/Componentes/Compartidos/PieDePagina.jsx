@@ -1,3 +1,4 @@
+import { perfilEmpresaAPI } from '../../api.js';
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Layout, Typography } from 'antd';
@@ -43,7 +44,7 @@ const PieDePagina = () => {
   useEffect(() => {
     const fetchPerfil = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/perfilEmpresa`);
+        const response = await axios.get(`${API_BASE_URL}/api/perfil-empresa`);
         console.log('Datos del perfil recibidos:', response.data);
         setDatosEmpresa({
           facebook: response.data.facebook || '',

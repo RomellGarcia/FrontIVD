@@ -20,7 +20,7 @@ const Mision = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost:5000/api/mision');
+      const response = await axios.get('http://localhost:5000/api/contenido/mision');
       const formattedMisiones = response.data.map(m => ({
         _id: m._id,
         titulo: m.titulo || '',
@@ -64,7 +64,7 @@ const Mision = () => {
       let response;
 
       if (editingId) {
-        response = await axios.put(`http://localhost:5000/api/mision/${editingId}`, payload);
+        response = await axios.put(`http://localhost:5000/api/contenido/mision/${editingId}`, payload);
         if (response.status === 200 || response.status === 201) {
           MySwal.fire({
             title: '¡Éxito!',
@@ -86,7 +86,7 @@ const Mision = () => {
           throw new Error(response.data?.message || 'Error desconocido');
         }
       } else {
-        response = await axios.post('http://localhost:5000/api/mision', payload);
+        response = await axios.post('http://localhost:5000/api/contenido/mision', payload);
         MySwal.fire({
           title: '¡Éxito!',
           text: 'Misión creada correctamente.',
@@ -136,7 +136,7 @@ const Mision = () => {
     if (result.isConfirmed) {
       setLoading(true);
       try {
-        const response = await axios.delete(`http://localhost:5000/api/mision/${id}`);
+        const response = await axios.delete(`http://localhost:5000/api/contenido/mision/${id}`);
         // Limpiar completamente el array de misiones
         setMisiones([]);
         MySwal.fire({

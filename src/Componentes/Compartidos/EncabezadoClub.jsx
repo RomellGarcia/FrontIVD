@@ -1,3 +1,4 @@
+import { perfilEmpresaAPI } from '../../api.js';
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   HomeOutlined, 
@@ -27,9 +28,9 @@ const EncabezadoClub = () => {
   useEffect(() => {
     const fetchPerfil = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/perfilEmpresa');
+        const response = await axios.get('http://localhost:5000/api/perfil-empresa');
         const data = response.data;
-        setNombreEmpresa(data.nombreEmpresa || 'Club no disponible');
+        setNombreEmpresa(data.nombre_empresa || 'Club no disponible');
         setLogoUrl(data.logo || '');
       } catch (error) {
         console.error('Error al obtener datos del perfil:', error);

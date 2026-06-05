@@ -16,7 +16,7 @@ const EncabezadoPublico = () => {
       try {
         const response = await perfilEmpresaAPI.get();
         const data = response.data.perfil;     
-        setNombreEmpresa(data.nombreEmpresa || 'Instituto Veracruzano del Deporte');
+        setNombreEmpresa(data.nombre_empresa || 'Instituto Veracruzano del Deporte');
         setLogoUrl(data.logo || '');
       } catch (error) {
         console.error('Error al obtener datos del perfil:', error);

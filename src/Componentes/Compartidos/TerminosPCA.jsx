@@ -54,7 +54,7 @@ function TerminosPCA() {
   useEffect(() => {
     const fetchTerminos = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/terminos`);
+        const response = await axios.get(`${API_BASE_URL}/api/contenido/terminos`);
         // Solo mostrar el término más reciente (el primero del array ordenado por fecha)
         const terminosData = Array.isArray(response.data) ? response.data : [response.data];
         // Tomar solo el primer término (el más reciente)

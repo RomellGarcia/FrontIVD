@@ -54,7 +54,7 @@ function VisionPCA() {
   useEffect(() => {
     const fetchVisiones = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/vision`);
+        const response = await axios.get(`${API_BASE_URL}/api/contenido/vision`);
         // Solo mostrar la visión más reciente (la primera del array ordenado por fecha)
         const visionesData = Array.isArray(response.data) ? response.data : [response.data];
         // Tomar solo la primera visión (la más reciente)

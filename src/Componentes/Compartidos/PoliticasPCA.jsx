@@ -52,30 +52,33 @@ function PoliticasPCA() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
-    const fetchPoliticas = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/api/politicas`);
-        // Solo mostrar la política más reciente (la primera del array ordenado por fecha)
-        const politicasData = Array.isArray(response.data) ? response.data : [response.data];
-        // Tomar solo la primera política (la más reciente)
-        const politicaActual = politicasData.length > 0 ? [politicasData[0]] : [];
-        // Formatear las fechas para consistencia
-        const formattedPoliticas = politicaActual.map((p) => ({
-          ...p,
-          createdAt: new Date(p.createdAt).toLocaleDateString(),
-          updatedAt: p.updatedAt ? new Date(p.updatedAt).toLocaleDateString() : null,
-        }));
-        setPoliticas(formattedPoliticas);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error al obtener políticas:", err);
-        setError("No se pudieron cargar las políticas. Intenta de nuevo más tarde.");
-        setLoading(false);
+  const fetchPoliticas = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/contenido/politica`)
+      const data = response.data.contenido  // ← extraer .contenido
+      if (!data) {
+        setPoliticas([])
+        setLoading(false)
+        return
       }
-    };
-
-    fetchPoliticas();
-  }, []);
+      // Normalizar a array con los campos nuevos
+      const politicaFormateada = [{
+        id: data.id,
+        titulo: data.titulo,
+        contenido: data.contenido,
+        createdAt: null,
+        updatedAt: data.updated_at ? new Date(data.updated_at).toLocaleDateString() : null
+      }]
+      setPoliticas(politicaFormateada)
+      setLoading(false)
+    } catch (err) {
+      console.error('Error al obtener políticas:', err)
+      setError('No se pudieron cargar las políticas. Intenta de nuevo más tarde.')
+      setLoading(false)
+    }
+  }
+  fetchPoliticas()
+}, [])
 
   if (loading) return <Typography align="center">Cargando políticas...</Typography>;
   if (error) return <Typography align="center" color="error">{error}</Typography>;
@@ -113,7 +116,7 @@ function PoliticasPCA() {
           ) : (
             <List>
               {politicas.map((politica) => (
-                <React.Fragment key={politica._id}>
+  <React.Fragment key={politica.id}>  {/* ← _id → id */}
                   <ListItem alignItems="flex-start">
                     <ListItemText
                       primary={politica.titulo}

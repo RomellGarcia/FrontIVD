@@ -1,3 +1,4 @@
+import { perfilEmpresaAPI } from '../../api.js';
 import React, { useState } from 'react';
 import axios from 'axios';
 import {
@@ -151,8 +152,8 @@ const ConvocatoriasAtleta = () => {
   // Función para cargar logo
   const fetchLogo = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/perfilEmpresa');
-      setLogoUrl(response.data.logo || '');
+      const response = await axios.get('http://localhost:5000/api/perfil-empresa');
+      setLogoUrl(response.data.perfil.logo || '');
     } catch (error) {
       setLogoUrl('');
     }

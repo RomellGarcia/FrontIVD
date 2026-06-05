@@ -1,3 +1,4 @@
+import { perfilEmpresaAPI } from '../../api.js';
 // components/AgregarEvento.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -128,8 +129,8 @@ const AgregarEvento = () => {
 
   const fetchLogo = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/perfilEmpresa');
-      setLogoUrl(response.data.logo || '');
+      const response = await axios.get('http://localhost:5000/api/perfil-empresa');
+      setLogoUrl(response.data.perfil.logo || '');
     } catch (error) {
       setLogoUrl('');
     }

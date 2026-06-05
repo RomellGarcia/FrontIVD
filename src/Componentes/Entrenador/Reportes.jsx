@@ -69,9 +69,9 @@ const ReportesEntrenador = () => {
   const fetchLogo = async () => {
     try {
               const response = await axios.get('http://localhost:5000/api/configuracion/logo');
-      if (response.data && response.data.logoUrl) {
-        console.log('✅ Logo cargado exitosamente:', response.data.logoUrl);
-        setLogoUrl(response.data.logoUrl);
+      if (response.data && response.data.perfil.logoUrl) {
+        console.log('✅ Logo cargado exitosamente:', response.data.perfil.logoUrl);
+        setLogoUrl(response.data.perfil.logoUrl);
       } else {
         console.warn('⚠️ No se encontró URL del logo en la respuesta');
       }

@@ -1,3 +1,4 @@
+import { perfilEmpresaAPI } from '../../api.js';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -122,7 +123,7 @@ function Perfil() {
   useEffect(() => {
     const fetchPerfil = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/perfilEmpresa`);
+        const response = await axios.get(`${API_BASE_URL}/api/perfil-empresa`);
         console.log('Datos recibidos del backend:', response.data);
         if (response.data && response.data._id) {
           setPerfil(response.data); // Usar el valor real
@@ -179,7 +180,7 @@ function Perfil() {
     setSavingWhatsapp(true);
     try {
       const formData = new FormData();
-      formData.append('nombreEmpresa', perfil.nombreEmpresa);
+      formData.append('nombreEmpresa', perfil.nombre_empresa);
       formData.append('eslogan', perfil.eslogan);
       formData.append('direccion', perfil.direccion);
       formData.append('correo', perfil.correo);
@@ -191,11 +192,11 @@ function Perfil() {
       if (perfil.logo && typeof perfil.logo !== 'string') {
         formData.append('logo', perfil.logo);
       }
-      await axios.put(`${API_BASE_URL}/api/perfilEmpresa`, formData, {
+      await axios.put(`${API_BASE_URL}/api/perfil-empresa`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       // Volver a consultar el perfil para sincronizar el estado
-      const response = await axios.get(`${API_BASE_URL}/api/perfilEmpresa`);
+      const response = await axios.get(`${API_BASE_URL}/api/perfil-empresa`);
       setPerfil(response.data); // Usar el valor real
       setSavingWhatsapp(false);
     } catch (error) {
@@ -269,7 +270,7 @@ function Perfil() {
     }
 
     const formData = new FormData();
-    formData.append('nombreEmpresa', perfil.nombreEmpresa);
+    formData.append('nombreEmpresa', perfil.nombre_empresa);
     formData.append('eslogan', perfil.eslogan);
     formData.append('direccion', perfil.direccion);
     formData.append('correo', perfil.correo);
@@ -283,7 +284,7 @@ function Perfil() {
     }
 
     try {
-      const endpoint = isRegistering ? '/api/perfilEmpresa' : '/api/perfilEmpresa';
+      const endpoint = isRegistering ? '/api/perfil-empresa' : '/api/perfil-empresa';
       const method = isRegistering ? axios.post : axios.put;
       const response = await method(`${API_BASE_URL}${endpoint}`, formData, {
         headers: {
@@ -337,7 +338,7 @@ function Perfil() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`${API_BASE_URL}/api/perfilEmpresa`);
+          await axios.delete(`${API_BASE_URL}/api/perfil-empresa`);
           MySwal.fire({
             icon: 'success',
             title: 'Perfil eliminado',
@@ -429,7 +430,7 @@ function Perfil() {
                   fullWidth
                   label="Nombre de la Institución"
                   name="nombreEmpresa"
-                  value={perfil.nombreEmpresa}
+                  value={perfil.nombre_empresa}
                   onChange={handleChange}
                   placeholder="Ingresa el nombre de la institución"
                   required
