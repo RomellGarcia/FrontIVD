@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { HomeOutlined, LoginOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { perfilEmpresaAPI } from '../../api.js';
 
 const EncabezadoPublico = () => {
   const [active, setActive] = useState('inicio');
@@ -14,8 +14,8 @@ const EncabezadoPublico = () => {
   useEffect(() => {
     const fetchPerfil = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/perfilEmpresa');
-        const data = response.data;
+        const response = await perfilEmpresaAPI.get();
+        const data = response.data.perfil;     
         setNombreEmpresa(data.nombreEmpresa || 'Instituto Veracruzano del Deporte');
         setLogoUrl(data.logo || '');
       } catch (error) {
