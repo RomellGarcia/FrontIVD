@@ -8,7 +8,7 @@ export const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
-  // Buscar token en el user guardado en sessionStorage
+  // Leer token desde el user guardado en sessionStorage
   const userStr = sessionStorage.getItem('user')
   if (userStr) {
     try {
@@ -20,7 +20,7 @@ api.interceptors.request.use((config) => {
     } catch (e) {}
   }
 
-  // Fallback: buscar en localStorage (SDK de Supabase)
+  // Fallback: localStorage del SDK de Supabase
   const keys = Object.keys(localStorage).filter(k => k.startsWith('sb-'))
   const session = keys.map(k => {
     try { return JSON.parse(localStorage.getItem(k)) } catch { return null }
@@ -32,7 +32,6 @@ api.interceptors.request.use((config) => {
 
   return config
 })
-
 
 export const authAPI = {
   login: (data) => api.post('/auth/login', data),
