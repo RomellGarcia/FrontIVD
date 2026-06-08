@@ -52,24 +52,29 @@ function TerminosPCA() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
-    const fetchTerminos = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/api/contenido/terminos`);
-        // Solo mostrar el término más reciente (el primero del array ordenado por fecha)
-        const terminosData = Array.isArray(response.data) ? response.data : [response.data];
-        // Tomar solo el primer término (el más reciente)
-        const terminoActual = terminosData.length > 0 ? [terminosData[0]] : [];
-        setTerminos(terminoActual);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error al obtener los términos:", err);
-        setError("No se pudieron cargar los términos y condiciones. Intenta de nuevo más tarde.");
-        setLoading(false);
+  const fetchTerminos = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/contenido/terminos`)
+      const data = response.data.contenido  // ← extraer .contenido
+      if (!data) {
+        setTerminos([])
+        setLoading(false)
+        return
       }
-    };
-
-    fetchTerminos();
-  }, []);
+      setTerminos([{
+        id:       data.id,
+        titulo:   data.titulo,
+        contenido: data.contenido
+      }])
+      setLoading(false)
+    } catch (err) {
+      console.error('Error al obtener los términos:', err)
+      setError('No se pudieron cargar los términos y condiciones.')
+      setLoading(false)
+    }
+  }
+  fetchTerminos()
+}, [])
 
   if (loading) return <Typography align="center">Cargando términos y condiciones...</Typography>;
   if (error) return <Typography align="center" color="error">{error}</Typography>;
