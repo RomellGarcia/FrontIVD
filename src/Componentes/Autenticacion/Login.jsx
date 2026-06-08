@@ -3,8 +3,8 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { useAuth } from './AuthContext';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useAuth } from './AuthContext'; 
+import { FaEye, FaEyeSlash } from 'react-icons/fa';  
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const MySwal = withReactContent(Swal);
@@ -14,7 +14,7 @@ const API_BASE_URL = "http://localhost:5000";
 
 function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login } = useAuth(); 
   const [rol, setRol] = useState("atleta");
   const [curp, setCurp] = useState("");
   const [correo, setCorreo] = useState("");
@@ -37,31 +37,52 @@ function Login() {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-      const payload = rol === 'atleta'
-        ? { curp: curp.toUpperCase(), password }  // ← CURP para atletas
-        : { email, password }                      // ← email para los demás
+  // Cambia estas líneas en handleSubmit:
 
-      const response = await authAPI.login(payload)
-      const { access_token, usuario } = response.data
+const handleSubmit = async (e) => {
+  e.preventDefault()
 
-      login(usuario.email, usuario.rol, { ...usuario, token: access_token })
+  if (Object.keys(formErrors).length > 0) {
+    MySwal.fire({ icon: 'error', title: 'Errores en el formulario', text: 'Por favor, corrige los errores antes de continuar.' })
+    return
+  }
 
-      const rutas = {
-        atleta: '/atleta',
-        club: '/club',
-        entrenador: '/entrenador',
-        administrador: '/administrador',
-      }
-      navigate(rutas[usuario.rol] || '/')
-      MySwal.fire({ icon: 'success', title: 'Éxito', text: 'Inicio de sesión exitoso' })
-    } catch (error) {
-      const msg = error.response?.data?.error || 'Error al iniciar sesión.'
-      MySwal.fire({ icon: 'error', title: 'Error', text: msg })
+  try {
+    // Atleta usa CURP, los demás usan correo
+    const payload = rol === 'atleta'
+      ? { curp: curp.toUpperCase(), password }
+      : { email: correo, password }
+
+    const response = await axios.post(`${API_BASE_URL}/api/auth/login`, payload, {
+      withCredentials: true
+    })
+
+    const { access_token, usuario } = response.data
+
+    // Guardar en AuthContext — adaptamos al formato que ya espera tu login()
+    login(usuario.curp || usuario.email, usuario.rol, { ...usuario, token: access_token })
+
+    const rutas = {
+      atleta:        '/atleta',
+      club:          '/club',
+      entrenador:    '/entrenador',
+      administrador: '/administrador',
+    }
+    navigate(rutas[usuario.rol] || '/')
+
+    MySwal.fire({ icon: 'success', title: 'Éxito', text: 'Inicio de sesión exitoso' })
+
+  } catch (error) {
+    const serverError = error.response?.data?.error
+    if (serverError === 'La CURP ingresada no existe') {
+      MySwal.fire({ icon: 'error', title: 'Usuario No Encontrado', text: 'La CURP ingresada no existe.' })
+    } else if (serverError === 'Credenciales incorrectas') {
+      MySwal.fire({ icon: 'error', title: 'Error', text: 'Contraseña incorrecta.' })
+    } else {
+      MySwal.fire({ icon: 'error', title: 'Error', text: serverError || 'Error al iniciar sesión.' })
     }
   }
+}
 
   const estilos = {
     contenedorPrincipal: {
@@ -174,25 +195,24 @@ function Login() {
                 <MenuItem value="administrador">Administrador</MenuItem>
               </Select>
             </FormControl>
-            {rol === 'atleta' ? (
+            {rol === "atleta" ? (
               <TextField
                 fullWidth
                 label="CURP"
                 value={curp}
                 onChange={e => setCurp(e.target.value)}
-                sx={sxInput}
+                sx={{ mb: 2, background: '#FFF', '& .MuiInputLabel-root': { color: '#7A4069', fontFamily: "'Arial', 'Helvetica', sans-serif" }, '& .MuiInputLabel-root.Mui-focused': { color: '#800020' }, '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: '#7A4069' }, '&:hover fieldset': { borderColor: '#800020' }, '&.Mui-focused fieldset': { borderColor: '#800020' }, color: '#7A4069', fontFamily: "'Arial', 'Helvetica', sans-serif" } }}
                 required
-                inputProps={{ maxLength: 18, style: { textTransform: 'uppercase' } }}
               />
             ) : (
               <TextField
                 fullWidth
-                label="Correo electrónico"
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                sx={sxInput}
+                label="Correo"
+                value={correo}
+                onChange={e => setCorreo(e.target.value)}
+                sx={{ mb: 2, background: '#FFF', '& .MuiInputLabel-root': { color: '#7A4069', fontFamily: "'Arial', 'Helvetica', sans-serif" }, '& .MuiInputLabel-root.Mui-focused': { color: '#800020' }, '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: '#7A4069' }, '&:hover fieldset': { borderColor: '#800020' }, '&.Mui-focused fieldset': { borderColor: '#800020' }, color: '#7A4069', fontFamily: "'Arial', 'Helvetica', sans-serif" } }}
                 required
+                type="email"
               />
             )}
             <TextField
@@ -227,7 +247,7 @@ function Login() {
               ¿Olvidaste tu contraseña?
             </Link>
             <Link to="/registro" style={estilos.enlace}>Regístrate</Link>
-
+           
           </form>
         </div>
       </div>

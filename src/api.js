@@ -8,14 +8,22 @@ export const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
+  const token = sessionStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+    return config
+  }
   const keys = Object.keys(localStorage).filter(k => k.startsWith('sb-'))
-  const session = keys.map(k => JSON.parse(localStorage.getItem(k))).find(v => v?.access_token)
+  const session = keys.map(k => {
+    try { return JSON.parse(localStorage.getItem(k)) } catch { return null }
+  }).find(v => v?.access_token)
+
   if (session?.access_token) {
     config.headers.Authorization = `Bearer ${session.access_token}`
   }
+
   return config
 })
-
 export const authAPI = {
   login: (data) => api.post('/auth/login', data),
   register: (data) => api.post('/auth/register', data),

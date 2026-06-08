@@ -9,15 +9,29 @@ export const AuthProvider = ({ children }) => {
   });
 
   const login = (username, tipo, userData) => {
-    // Validar que userData tenga las propiedades necesarias
+    // El nuevo backend devuelve usuario con id y nombre en snake_case
     if (!userData || !userData.id || !userData.nombre) {
       console.error('Datos de usuario incompletos:', userData);
       return false;
     }
-    
-    const authData = { username, tipo, ...userData };
+
+    const authData = {
+      username,
+      tipo,
+      ...userData,
+      // Guardar el token de Supabase para usarlo en requests
+      token: userData.token || null
+    };
+
     setUser(authData);
     sessionStorage.setItem('user', JSON.stringify(authData));
+
+    // Guardar token también en sessionStorage por separado
+    // para que el interceptor de api.js lo pueda leer fácilmente
+    if (userData.token) {
+      sessionStorage.setItem('token', userData.token);
+    }
+
     return true;
   };
 
@@ -29,7 +43,6 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('token');
-    // Limpiar también localStorage por si acaso hay datos ahí
     localStorage.removeItem('user');
     localStorage.removeItem('token');
   };
@@ -39,11 +52,8 @@ export const AuthProvider = ({ children }) => {
       const storedUser = sessionStorage.getItem('user');
       setUser(storedUser ? JSON.parse(storedUser) : null);
     };
-
     window.addEventListener('storage', handleStorageChange);
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   return (
