@@ -42,32 +42,32 @@ const PieDePagina = () => {
   const mapRef = useRef(null);
 
   useEffect(() => {
-    const fetchPerfil = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/api/perfil-empresa`);
-        console.log('Datos del perfil recibidos:', response.data);
-        setDatosEmpresa({
-          facebook: response.data.facebook || '',
-          twitter: response.data.twitter || '',
-          instagram: response.data.instagram || '',
-          telefono: response.data.telefono || '',
-          correo: response.data.correo || '',
-          direccion: response.data.direccion || '',
-          mostrarWhatsapp: response.data.mostrarWhatsapp || true, // Asignar el nuevo campo
-        });
+  const fetchPerfil = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/perfil-empresa`)
+      const perfil = response.data.perfil  // ← extraer .perfil
+      const redes = perfil.redes_sociales || []
 
-        // Inicializar o actualizar el mapa después de obtener los datos
-        if (response.data.direccion && mapRef.current) {
-          initializeOrUpdateMap(response.data.direccion);
-        }
-      } catch (err) {
-        console.error('Error fetching perfil:', err);
-        setError('No se pudieron cargar los datos de la empresa.');
+      setDatosEmpresa({
+        facebook:       redes.find(r => r.plataforma === 'facebook')?.url || '',
+        twitter:        redes.find(r => r.plataforma === 'twitter')?.url  || '',
+        instagram:      redes.find(r => r.plataforma === 'instagram')?.url || '',
+        telefono:       perfil.telefono  || '',
+        correo:         perfil.correo    || '',
+        direccion:      perfil.direccion || '',
+        mostrarWhatsapp: perfil.mostrar_whatsapp ?? true,
+      })
+
+      if (perfil.direccion && mapRef.current) {
+        initializeOrUpdateMap(perfil.direccion)
       }
-    };
-
-    fetchPerfil();
-  }, []);
+    } catch (err) {
+      console.error('Error fetching perfil:', err)
+      setError('No se pudieron cargar los datos de la empresa.')
+    }
+  }
+  fetchPerfil()
+}, [])
 
   useEffect(() => {
     // Inicializar el mapa solo si el contenedor existe
