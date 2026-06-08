@@ -127,7 +127,7 @@ const ConvocatoriasAtleta = () => {
       
       console.log('🔍 Buscando convocatorias para:', { edad, genero });
       
-      const response = await axios.get(`http://localhost:5000/api/eventos/convocatorias-para-atleta?edad=${edad}&genero=${genero}`);
+      const response = await eventosAPI.getMisConvocatorias();
       
       console.log('📋 Convocatorias encontradas:', response.data);
       
