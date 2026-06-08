@@ -52,24 +52,21 @@ function MisionPCA() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
-    const fetchMision = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/api/contenido/mision`);
-        // Solo mostrar la misión más reciente (la primera del array ordenado por fecha)
-        const misionesData = Array.isArray(response.data) ? response.data : [response.data];
-        // Tomar solo la primera misión (la más reciente)
-        const misionActual = misionesData.length > 0 ? [misionesData[0]] : [];
-        setMision(misionActual);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error al obtener la Misión:", err);
-        setError("No se pudieron cargar la Misión. Intenta de nuevo más tarde.");
-        setLoading(false);
-      }
-    };
-
-    fetchMision();
-  }, []);
+  const fetchMision = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/contenido/mision`)
+      const data = response.data.contenido
+      if (!data) { setMision([]); setLoading(false); return }
+      setMision([{ id: data.id, titulo: data.titulo, contenido: data.contenido }])
+      setLoading(false)
+    } catch (err) {
+      console.error('Error al obtener la Misión:', err)
+      setError('No se pudieron cargar la Misión.')
+      setLoading(false)
+    }
+  }
+  fetchMision()
+}, [])
 
   if (loading) return <Typography align="center">Cargando Mision...</Typography>;
   if (error) return <Typography align="center" color="error">{error}</Typography>;
@@ -107,7 +104,7 @@ function MisionPCA() {
           ) : (
             <List>
               {mision.map((misionItem) => (
-                <React.Fragment key={misionItem._id}>
+                <React.Fragment key={misionItem.id}>
                   <ListItem alignItems="flex-start">
                     <ListItemText
                       primary={misionItem.titulo}
