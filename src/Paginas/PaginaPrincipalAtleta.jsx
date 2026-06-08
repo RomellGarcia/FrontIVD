@@ -342,16 +342,17 @@ const PaginaPrincipalAtleta = () => {
                                 {club.nombre}
                               </Typography>
                             }
+                            secondaryTypographyProps={{ component: 'div' }}  // ← agrega esto
                             secondary={
                               <Box>
-                                <Typography variant="body2" sx={{ color: '#7A4069' }}>
-                                  📍 {club.estadoNacimiento}
+                                <Typography variant="body2" component="span" sx={{ color: '#7A4069', display: 'block' }}>
+                                  📍 {club.direccion}
                                 </Typography>
-                                <Typography variant="body2" sx={{ color: '#7A4069' }}>
+                                <Typography variant="body2" component="span" sx={{ color: '#7A4069', display: 'block' }}>
                                   📞 {club.telefono}
                                 </Typography>
                                 {club.descripcion && (
-                                  <Typography variant="body2" sx={{ color: '#7A4069', mt: 1 }}>
+                                  <Typography variant="body2" component="span" sx={{ color: '#7A4069', display: 'block', mt: 1 }}>
                                     {club.descripcion.substring(0, 100)}...
                                   </Typography>
                                 )}
