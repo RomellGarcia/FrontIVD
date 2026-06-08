@@ -1,3 +1,4 @@
+import { eventosAPI } from '../../api.js';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Box from '@mui/material/Box';
@@ -54,29 +55,27 @@ const EventosAtleta = () => {
 
   const fetchEventos = async () => {
     try {
-      setLoading(true);
-      setErrorMessage('');
-      
-      const response = await axios.get('http://localhost:5000/api/eventos');
-      const fechaActual = new Date();
-      const eventosFuturos = response.data.filter(evento => new Date(evento.fecha) > fechaActual);
-      setEventos(eventosFuturos || []);
+      setLoading(true)
+      const response = await eventosAPI.getAll()
+      const fechaActual = new Date()
+      const todos = response.data.eventos || []
+      setEventos(todos.filter(e => new Date(e.fecha) > fechaActual))
     } catch (error) {
-      console.error('Error al obtener eventos:', error);
-      setErrorMessage('Error al cargar los eventos. Intente de nuevo.');
+      setErrorMessage('Error al cargar los eventos.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const fetchInscripciones = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/eventos/inscripciones?atletaId=${user.id}`);
-      setInscripciones(response.data || []);
+      const response = await eventosAPI.getMisInscripciones()
+      setInscripciones(response.data.inscripciones || [])
     } catch (error) {
-      console.error('Error al obtener inscripciones:', error);
+      console.error('Error al obtener inscripciones:', error)
     }
-  };
+  }
+
 
   const handleVerConvocatorias = (evento) => {
     setEventoConvocatorias(evento);
@@ -100,47 +99,22 @@ const EventosAtleta = () => {
     setEventoConvocatorias(null);
   };
 
-  const handleInscribirse = async (evento) => {
+  const handleInscribirse = async (convocatoriaId) => {
     try {
-      setInscribiendo(true);
-      
-      const inscripcionData = {
-        eventoId: evento._id, 
-        atletaId: user.id,
-        datosAtleta: {
-          nombre: user.nombre,
-          apellidoPaterno: user.apellidopa,
-          apellidoMaterno: user.apellidoma,
-          curp: user.curp,
-          fechaNacimiento: user.fechaNacimiento,
-          sexo: user.sexo
-        }
-      };
-
-      const response = await axios.post('http://localhost:5000/api/eventos/inscripciones', inscripcionData);
-      
-      setSnackbar({
-        open: true,
-        message: '¡Inscripción exitosa! Ya estás registrado para participar.',
-        severity: 'success'
-      });
-
-      await fetchInscripciones();
+      setInscribiendo(true)
+      await eventosAPI.inscribir({ convocatoria_id: convocatoriaId })
+      setSnackbar({ open: true, message: '¡Inscripción exitosa!', severity: 'success' })
+      await fetchInscripciones()
     } catch (error) {
-      console.error('Error al inscribirse:', error);
-      setSnackbar({
-        open: true,
-        message: error.response?.data?.message || 'Error al inscribirse. Intente de nuevo.',
-        severity: 'error'
-      });
+      setSnackbar({ open: true, message: error.response?.data?.error || 'Error al inscribirse.', severity: 'error' })
     } finally {
-      setInscribiendo(false);
+      setInscribiendo(false)
     }
-  };
+  }
 
-  const isInscrito = (eventoId) => {
-    return inscripciones.some(inscripcion => inscripcion.eventoId === eventoId);
-  };
+  const isInscrito = (convocatoriaId) => {
+    return inscripciones.some(i => i.convocatoria_id === convocatoriaId)
+  }
 
   const isConvocatoriaCerrada = (evento) => {
     const fechaActual = new Date();
@@ -201,7 +175,7 @@ const EventosAtleta = () => {
             {eventos.map((evento) => {
               const inscrito = isInscrito(evento._id);
               const convocatoriaCerrada = isConvocatoriaCerrada(evento);
-              
+
               return (
                 <TableRow
                   key={evento._id || evento.id}
@@ -267,7 +241,7 @@ const EventosAtleta = () => {
                 {eventoConvocatorias.convocatorias.map((convocatoria, index) => {
                   const inscrito = isInscrito(eventoConvocatorias._id);
                   const convocatoriaCerrada = isConvocatoriaCerrada(eventoConvocatorias);
-                  
+
                   return (
                     <TableRow key={index}>
                       <TableCell>
@@ -278,32 +252,32 @@ const EventosAtleta = () => {
                       <TableCell>{convocatoria.categoria}</TableCell>
                       <TableCell>{convocatoria.edadMin} - {convocatoria.edadMax} años</TableCell>
                       <TableCell>
-                        <Chip 
-                          label={convocatoria.genero === 'mixto' ? 'Mixto' : 
-                                 convocatoria.genero === 'masculino' ? 'Masculino' : 'Femenino'} 
-                          color={convocatoria.genero === 'mixto' ? 'default' : 
-                                 convocatoria.genero === 'masculino' ? 'primary' : 'secondary'}
+                        <Chip
+                          label={convocatoria.genero === 'mixto' ? 'Mixto' :
+                            convocatoria.genero === 'masculino' ? 'Masculino' : 'Femenino'}
+                          color={convocatoria.genero === 'mixto' ? 'default' :
+                            convocatoria.genero === 'masculino' ? 'primary' : 'secondary'}
                           size="small"
                         />
                       </TableCell>
                       <TableCell>
                         {inscrito ? (
-                          <Chip 
+                          <Chip
                             icon={<CheckCircleIcon />}
-                            label="Inscrito" 
-                            color="success" 
+                            label="Inscrito"
+                            color="success"
                             size="small"
                           />
                         ) : convocatoriaCerrada ? (
-                          <Chip 
-                            label="Cerrada" 
-                            color="error" 
+                          <Chip
+                            label="Cerrada"
+                            color="error"
                             size="small"
                           />
                         ) : (
-                          <Chip 
-                            label="Abierta" 
-                            color="primary" 
+                          <Chip
+                            label="Abierta"
+                            color="primary"
                             size="small"
                           />
                         )}
@@ -359,7 +333,7 @@ const EventosAtleta = () => {
                     {eventoSeleccionado.titulo}
                   </Typography>
                 </Grid>
-                
+
                 <Grid item xs={12} md={6}>
                   <Card variant="outlined">
                     <CardContent>
@@ -376,7 +350,7 @@ const EventosAtleta = () => {
                     </CardContent>
                   </Card>
                 </Grid>
-                
+
                 <Grid item xs={12} md={6}>
                   <Card variant="outlined">
                     <CardContent>
@@ -393,8 +367,8 @@ const EventosAtleta = () => {
                             <strong>Rango de Edad:</strong> {eventoSeleccionado.convocatoriaSeleccionada.edadMin} - {eventoSeleccionado.convocatoriaSeleccionada.edadMax} años
                           </Typography>
                           <Typography variant="body2" paragraph>
-                            <strong>Género:</strong> {eventoSeleccionado.convocatoriaSeleccionada.genero === 'mixto' ? 'Mixto' : 
-                                                      eventoSeleccionado.convocatoriaSeleccionada.genero === 'masculino' ? 'Masculino' : 'Femenino'}
+                            <strong>Género:</strong> {eventoSeleccionado.convocatoriaSeleccionada.genero === 'mixto' ? 'Mixto' :
+                              eventoSeleccionado.convocatoriaSeleccionada.genero === 'masculino' ? 'Masculino' : 'Femenino'}
                           </Typography>
                         </>
                       ) : (
@@ -416,7 +390,7 @@ const EventosAtleta = () => {
                     </CardContent>
                   </Card>
                 </Grid>
-                
+
                 {eventoSeleccionado.descripcion && (
                   <Grid item xs={12}>
                     <Card variant="outlined">
@@ -429,7 +403,7 @@ const EventosAtleta = () => {
                     </Card>
                   </Grid>
                 )}
-                
+
                 <Grid item xs={12}>
                   <Card variant="outlined">
                     <CardContent>
@@ -468,8 +442,8 @@ const EventosAtleta = () => {
         autoHideDuration={6000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
       >
-        <Alert 
-          onClose={() => setSnackbar({ ...snackbar, open: false })} 
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
           severity={snackbar.severity}
           sx={{ width: '100%' }}
         >

@@ -1,3 +1,4 @@
+import { resultadosAPI, perfilEmpresaAPI } from '../../api.js';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -56,33 +57,28 @@ const ResultadosAtleta = () => {
   }, [user, navigate]);
 
   const fetchResultados = async () => {
-    try {
-      setLoading(true);
-              const response = await axios.get(`http://localhost:5000/api/resultados/atleta/${user.id}`);
-      const sortedResultados = response.data.sort((a, b) => new Date(b.fechaEvento) - new Date(a.fechaEvento));
-      setResultados(sortedResultados);
-      setErrorMessage('');
-    } catch (error) {
-      console.error('Error al obtener resultados:', error);
-      setErrorMessage('Error al cargar los resultados. Intente de nuevo.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true)
+    const response = await resultadosAPI.getByAtleta(user.id)
+    const data = response.data.resultados || []
+    const sorted = data.sort((a, b) => new Date(b.evento_fecha) - new Date(a.evento_fecha))
+    setResultados(sorted)
+  } catch (error) {
+    setErrorMessage('Error al cargar los resultados.')
+  } finally {
+    setLoading(false)
+  }
+}
+
 
   const fetchLogo = async () => {
-    try {
-              const response = await axios.get('http://localhost:5000/api/configuracion/logo');
-      if (response.data && response.data.perfil.logoUrl) {
-        console.log('✅ Logo cargado exitosamente:', response.data.perfil.logoUrl);
-        setLogoUrl(response.data.perfil.logoUrl);
-      } else {
-        console.warn('⚠️ No se encontró URL del logo en la respuesta');
-      }
-    } catch (error) {
-      console.warn('⚠️ No se pudo cargar el logo:', error);
-    }
-  };
+  try {
+    const response = await perfilEmpresaAPI.get()
+    setLogoUrl(response.data.perfil?.logo || '')
+  } catch (error) {
+    console.warn('No se pudo cargar el logo:', error)
+  }
+}
 
   const handleViewDetails = (resultado) => {
     setResultadoSeleccionado(resultado);

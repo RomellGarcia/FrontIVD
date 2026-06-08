@@ -1,3 +1,4 @@
+import { atletasAPI, clubesAPI } from '../../api.js';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -55,68 +56,55 @@ const PerfilAtleta = () => {
     try {
       if (!user?.id) return;
       setLoading(true);
-      console.log('Fetching profile for user ID:', user.id);
-      
-      // Intentar primero con el endpoint de atleta específico
-      let response;
-      try {
-        response = await axios.get(`http://localhost:5000/api/registros/atleta/${user.id}`);
-        console.log('Profile data received:', response.data);
-      } catch (error) {
-        console.log('First endpoint failed, trying general endpoint');
-        // Si falla, intentar con el endpoint general
-                  response = await axios.get(`http://localhost:5000/api/registros/${user.id}`);
-        console.log('Profile data from general endpoint:', response.data);
-      }
-      
-      if (response.data) {
-        setPerfil(response.data);
-        setErrorMessage('');
-      } else {
-        setErrorMessage('No se pudieron cargar los datos del perfil.');
+      const response = await atletasAPI.getById(user.id)
+      const data = response.data.atleta
+      if (data) {
+        // Mapear campos nuevos a los que espera el JSX
+        setPerfil({
+          ...data,
+          apellidopa: data.apellido_paterno,
+          apellidoma: data.apellido_materno,
+          fechaNacimiento: data.fecha_nacimiento,
+          estadoNacimiento: data.estado_nacimiento,
+          gmail: data.email,
+          clubId: data.club_id,
+        })
+        setErrorMessage('')
       }
     } catch (error) {
-      console.error('Error al cargar perfil:', error);
-      setErrorMessage('Error al cargar el perfil. Intente de nuevo.');
+      console.error('Error al cargar perfil:', error)
+      setErrorMessage('Error al cargar el perfil.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const fetchClubes = async () => {
     try {
-              const response = await axios.get('http://localhost:5000/api/registros/clubes');
-      setClubes(response.data);
+      const response = await clubesAPI.getAll()
+      setClubes(response.data.clubes || [])
     } catch {
-      setClubes([]);
+      setClubes([])
     }
-  };
+  }
 
   const fetchSolicitud = async () => {
     try {
       if (!user?.id) return;
-              const response = await axios.get(`http://localhost:5000/api/registros/solicitudes-club?atletaId=${user.id}`);
-      // Solo mostrar la última pendiente
-      const pendientes = response.data.filter(s => s.estado === 'pendiente');
-      setSolicitud(pendientes.length > 0 ? pendientes[0] : null);
-      
-      // Verificar si hay solicitudes rechazadas recientes
-      const rechazadas = response.data.filter(s => s.estado === 'rechazada');
+      const response = await atletasAPI.getSolicitudes({ atleta_id: user.id })
+      const data = response.data.solicitudes || []
+      const pendientes = data.filter(s => s.estado === 'pendiente')
+      setSolicitud(pendientes.length > 0 ? pendientes[0] : null)
+      const rechazadas = data.filter(s => s.estado === 'rechazada')
       if (rechazadas.length > 0) {
-        const ultimaRechazada = rechazadas[rechazadas.length - 1];
-        const fechaRechazo = new Date(ultimaRechazada.fechaSolicitud);
-        const fechaActual = new Date();
-        const diferenciaDias = (fechaActual - fechaRechazo) / (1000 * 60 * 60 * 24);
-        
-        // Si la solicitud fue rechazada en los últimos 7 días, mostrar mensaje
-        if (diferenciaDias <= 7) {
-          setErrorMessage('Tu solicitud anterior fue rechazada. Puedes enviar una nueva solicitud a cualquier club.');
-        }
+        const ultima = rechazadas[rechazadas.length - 1]
+        const diff = (new Date() - new Date(ultima.fecha_solicitud)) / (1000 * 60 * 60 * 24)
+        if (diff <= 7) setErrorMessage('Tu solicitud anterior fue rechazada.')
       }
     } catch {
-      setSolicitud(null);
+      setSolicitud(null)
     }
-  };
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -131,39 +119,19 @@ const PerfilAtleta = () => {
 
   const handleSave = async () => {
     try {
-      if (!perfil) {
-        setErrorMessage('No hay datos de perfil para guardar.');
-        return;
-      }
-      
-      const perfilToSave = {
-        ...perfil,
-        sexo: perfil.sexo === 'Hombre' ? 'masculino' : (perfil.sexo === 'Mujer' ? 'femenino' : perfil.sexo),
-      };
-      
-      console.log('Saving profile data:', perfilToSave);
-      
-      // Intentar primero con el endpoint de atleta específico
-      try {
-                  await axios.put(`http://localhost:5000/api/registros/atleta/${user.id}`, perfilToSave);
-        console.log('Profile updated successfully');
-      } catch (error) {
-        console.log('First endpoint failed, trying general endpoint');
-        // Si falla, intentar con el endpoint general
-                  await axios.put(`http://localhost:5000/api/registros/${user.id}`, perfilToSave);
-        console.log('Profile updated from general endpoint');
-      }
-      
-      setEditMode(false);
-      setErrorMessage('Perfil actualizado exitosamente.');
-      
-      // Recargar el perfil para mostrar los cambios
-      fetchPerfil();
+      await atletasAPI.updatePerfil({
+        telefono: perfil.telefono,
+        municipio: perfil.municipio,
+        lugar_entrenamiento: perfil.lugar_entrenamiento,
+      })
+      setEditMode(false)
+      setErrorMessage('Perfil actualizado exitosamente.')
+      fetchPerfil()
     } catch (error) {
-      console.error('Error al actualizar perfil:', error);
-      setErrorMessage('Error al actualizar el perfil. Intente de nuevo.');
+      setErrorMessage('Error al actualizar el perfil.')
     }
-  };
+  }
+
 
   const handleSolicitud = async () => {
     try {
@@ -191,63 +159,38 @@ const PerfilAtleta = () => {
 
   const handleEnviarSolicitud = async () => {
     try {
-      if (!user?.id) return;
-      await axios.post('http://localhost:5000/api/registros/solicitudes-club', {
-        atletaId: user.id,
-        clubId: clubSeleccionado,
-        tipo: 'asociar',
-      });
-      setMensaje('Solicitud enviada correctamente. Espera la respuesta del club.');
+      await atletasAPI.crearSolicitud({
+        club_id: parseInt(clubSeleccionado),
+        tipo: 'asociar'
+      })
+      setMensaje('Solicitud enviada correctamente.')
+      setClubSeleccionado('')
+      fetchSolicitud()
     } catch (error) {
-      setMensaje(error.response?.data?.error || 'Error al enviar solicitud');
+      setMensaje(error.response?.data?.error || 'Error al enviar solicitud')
     }
-  };
+  }
 
   const handleSalirClub = async () => {
-    try {
-      if (!user?.id) return;
-      
-      // Mostrar confirmación antes de salir del club
-      const result = await Swal.fire({
-        title: '¿Confirmar salida del club?',
-        text: '¿Estás seguro de que deseas salir del club? Esto te convertirá en atleta independiente.',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#800020',
-        cancelButtonColor: '#7A4069',
-        confirmButtonText: 'Sí, salir del club',
-        cancelButtonText: 'Cancelar'
-      });
-      
-      if (result.isConfirmed) {
-        // Salir del club actual
-        try {
-          await axios.put(`http://localhost:5000/api/registros/atleta/${user.id}`, {
-            clubId: null,
-            fechaIngresoClub: null
-          });
-          console.log('Successfully left club');
-        } catch (error) {
-          console.log('First endpoint failed, trying general endpoint');
-          // Si falla, intentar con el endpoint general
-          await axios.put(`http://localhost:5000/api/registros/${user.id}`, {
-            clubId: null,
-            fechaIngresoClub: null
-          });
-          console.log('Left club from general endpoint');
-        }
-        
-        setErrorMessage('Has salido del club exitosamente. Ahora puedes unirte a otro club o permanecer independiente.');
-        
-        // Actualizar el perfil
-        fetchPerfil();
-        fetchSolicitud();
+    const result = await Swal.fire({
+      title: '¿Confirmar salida del club?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#800020',
+      cancelButtonColor: '#7A4069',
+      confirmButtonText: 'Sí, salir',
+      cancelButtonText: 'Cancelar'
+    })
+    if (result.isConfirmed) {
+      try {
+        await atletasAPI.crearSolicitud({ tipo: 'independiente' })
+        setErrorMessage('Solicitud enviada. Espera confirmación.')
+        fetchPerfil()
+      } catch (error) {
+        setErrorMessage('Error al salir del club.')
       }
-    } catch (error) {
-      console.error('Error al salir del club:', error);
-      setErrorMessage('Error al salir del club. Intente de nuevo.');
     }
-  };
+  }
 
   const limpiarMensaje = () => {
     setErrorMessage('');
@@ -282,7 +225,7 @@ const PerfilAtleta = () => {
           <Button
             variant="contained"
             onClick={fetchPerfil}
-            sx={{ 
+            sx={{
               bgcolor: '#800020',
               '&:hover': { bgcolor: '#600018' }
             }}
@@ -302,8 +245,8 @@ const PerfilAtleta = () => {
 
       {errorMessage && (
         <Box sx={{ mb: 2 }}>
-          <Alert 
-            severity={errorMessage.includes('exitosamente') || errorMessage.includes('enviada') ? 'success' : 'error'} 
+          <Alert
+            severity={errorMessage.includes('exitosamente') || errorMessage.includes('enviada') ? 'success' : 'error'}
             onClose={limpiarMensaje}
             action={
               <Button color="inherit" size="small" onClick={limpiarMensaje}>
@@ -318,7 +261,7 @@ const PerfilAtleta = () => {
 
       {mensaje && (
         <Box sx={{ mb: 2 }}>
-          <Alert 
+          <Alert
             severity="info"
             onClose={() => setMensaje('')}
             action={
@@ -471,13 +414,13 @@ const PerfilAtleta = () => {
                     if (!user?.id) return;
                     limpiarMensaje(); // Limpiar mensajes anteriores
                     setMensaje(''); // Limpiar mensaje de info
-                    
-                                      await axios.post('http://localhost:5000/api/registros/solicitudes-club', {
-                    atletaId: user.id,
-                    clubId: clubSeleccionado,
-                    tipo: 'asociar',
-                  });
-                    
+
+                    await axios.post('http://localhost:5000/api/registros/solicitudes-club', {
+                      atletaId: user.id,
+                      clubId: clubSeleccionado,
+                      tipo: 'asociar',
+                    });
+
                     setMensaje('Solicitud enviada correctamente. Espera la respuesta del club.');
                     setClubSeleccionado('');
                     fetchSolicitud();
