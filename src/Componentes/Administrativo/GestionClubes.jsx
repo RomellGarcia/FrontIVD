@@ -590,7 +590,7 @@ const GestionClubes = () => {
                       secondary={
                         <Box>
                           <Typography variant="body2">
-                            <strong>Edad:</strong> {calcularEdad(atleta.fechaNacimiento)} años
+                            <strong>Edad:</strong> {calcularEdad(atleta.fecha_nacimiento)} años
                           </Typography>
                           <Typography variant="body2">
                             <strong>Género:</strong> {atleta.sexo || 'N/A'}

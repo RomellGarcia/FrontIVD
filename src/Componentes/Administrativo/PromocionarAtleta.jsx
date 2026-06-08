@@ -315,7 +315,7 @@ const PromocionarAtleta = () => {
                       </TableCell>
                       <TableCell sx={{ minWidth: 150 }}>
                         <Typography variant="body2">
-                          {calcularEdad(entrenador.fechaNacimiento)} años
+                          {calcularEdad(entrenador.fecha_nacimiento)} años
                         </Typography>
                       </TableCell>
                       <TableCell sx={{ minWidth: 120 }}>

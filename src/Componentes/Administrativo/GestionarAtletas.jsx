@@ -356,8 +356,8 @@ const GestionarAtletas = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       <CalendarIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
                       <Typography variant="body2" noWrap>
-                        {atleta.fechaNacimiento ? 
-                          `${formatearFecha(atleta.fechaNacimiento)} (${calcularEdad(atleta.fechaNacimiento)} años)` : 
+                        {atleta.fecha_nacimiento ? 
+                          `${formatearFecha(atleta.fecha_nacimiento)} (${calcularEdad(atleta.fecha_nacimiento)} años)` : 
                           'N/A'
                         }
                       </Typography>

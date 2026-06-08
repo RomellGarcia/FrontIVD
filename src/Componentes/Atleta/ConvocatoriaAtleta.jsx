@@ -102,10 +102,10 @@ const ConvocatoriasAtleta = () => {
       
       console.log('👤 Datos del usuario:', user);
       
-      const edad = calcularEdad(user.fechaNacimiento);
-      const genero = (user.sexo || '').toLowerCase();
+      const edad = calcularEdad(user.fecha_nacimiento);
+      const genero = (user.genero || '').toLowerCase();
       
-      console.log('📊 Datos calculados:', { edad, genero, fechaNacimiento: user.fechaNacimiento, sexo: user.sexo });
+      console.log('📊 Datos calculados:', { edad, genero, fechaNacimiento: user.fecha_nacimiento, sexo: user.genero });
       
       if (edad === null || edad === undefined) {
         setErrorMessage('No se puede determinar tu edad. Verifica que tu fecha de nacimiento esté correcta en tu perfil.');
@@ -195,7 +195,7 @@ const ConvocatoriasAtleta = () => {
     }
     
     // Verificar que el usuario tenga todos los datos necesarios
-    if (!user.nombre || !user.curp || !user.fechaNacimiento || !user.sexo) {
+    if (!user.nombre || !user.curp || !user.fecha_nacimiento || !user.genero) {
       setErrorMessage('Error: Tu perfil debe estar completo para participar. Verifica que tengas nombre, CURP, fecha de nacimiento y sexo registrados.');
       return;
     }
@@ -228,8 +228,8 @@ const ConvocatoriasAtleta = () => {
           apellidoma: user.apellidoma,
           curp: user.curp,
           club: user.clubId || 'Independiente',
-          sexo: user.sexo,
-          fechaNacimiento: user.fechaNacimiento,
+          sexo: user.genero,
+          fechaNacimiento: user.fecha_nacimiento,
         },
       });
       
@@ -864,7 +864,7 @@ const ConvocatoriasAtleta = () => {
                 <strong>Sexo:</strong> {user?.sexo}
               </Typography>
               <Typography variant="body2" sx={{ mb: 1 }}>
-                <strong>Fecha de Nacimiento:</strong> {user?.fechaNacimiento ? new Date(user.fechaNacimiento).toLocaleDateString('es-ES') : 'No disponible'}
+                <strong>Fecha de Nacimiento:</strong> {user?.fecha_nacimiento ? new Date(user.fecha_nacimiento).toLocaleDateString('es-ES') : 'No disponible'}
               </Typography>
             </CardContent>
           </Card>

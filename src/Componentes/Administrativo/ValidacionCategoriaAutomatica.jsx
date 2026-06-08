@@ -145,7 +145,7 @@ const ValidacionCategoriaAutomatica = () => {
       const evento = eventos.find(e => e._id === inscripcion.eventoId);
       
       if (atleta && evento) {
-        const edad = calcularEdad(atleta.fechaNacimiento);
+        const edad = calcularEdad(atleta.fecha_nacimiento);
         const categoriaAutomatica = obtenerCategoriaAutomatica(edad, atleta.sexo);
         const categoriaEvento = evento.categoria;
         

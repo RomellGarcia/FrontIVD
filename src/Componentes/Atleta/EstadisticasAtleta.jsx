@@ -240,7 +240,7 @@ const EstadisticasAtleta = () => {
                 {perfilAtleta.nombre} {perfilAtleta.apellidopa} {perfilAtleta.apellidoma}
               </Typography>
               <Typography variant="body1" color="textSecondary">
-                Edad: {calcularEdad(perfilAtleta.fechaNacimiento)} años | 
+                Edad: {calcularEdad(perfilAtleta.fecha_nacimiento)} años | 
                 Género: {perfilAtleta.sexo === 'masculino' ? 'Masculino' : 'Femenino'} |
                 Categoría: {perfilAtleta.categoria || 'No especificada'}
               </Typography>

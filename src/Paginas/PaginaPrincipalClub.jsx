@@ -333,7 +333,7 @@ const PaginaPrincipalClub = () => {
                           </Box>
                         </Box>
                         <Typography variant="body2" color="textSecondary">
-                          <strong>Edad:</strong> {calcularEdad(atleta.fechaNacimiento)} años
+                          <strong>Edad:</strong> {calcularEdad(atleta.fecha_nacimiento)} años
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
                           <strong>Género:</strong> {atleta.sexo || 'N/A'}

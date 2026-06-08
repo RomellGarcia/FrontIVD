@@ -220,10 +220,10 @@ const GestionarAtletas = () => {
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2">
-                        {calcularEdad(atleta.fechaNacimiento)} años
+                        {calcularEdad(atleta.fecha_nacimiento)} años
                       </Typography>
                       <Typography variant="caption" color="textSecondary">
-                        {formatearFecha(atleta.fechaNacimiento)}
+                        {formatearFecha(atleta.fecha_nacimiento)}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -293,7 +293,7 @@ const GestionarAtletas = () => {
                   <Box sx={{ mb: 2 }}>
                     <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                       <CalendarIcon sx={{ fontSize: 16, mr: 1, color: '#7A4069' }} />
-                      {calcularEdad(atleta.fechaNacimiento)} años
+                      {calcularEdad(atleta.fecha_nacimiento)} años
                     </Typography>
                     <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                       <EmailIcon sx={{ fontSize: 16, mr: 1, color: '#7A4069' }} />
@@ -363,10 +363,10 @@ const GestionarAtletas = () => {
                     <strong>CURP:</strong> {selectedAtleta.curp}
                   </Typography>
                   <Typography variant="body2" sx={{ mb: 1 }}>
-                    <strong>Fecha de nacimiento:</strong> {formatearFecha(selectedAtleta.fechaNacimiento)}
+                    <strong>Fecha de nacimiento:</strong> {formatearFecha(selectedAtleta.fecha_nacimiento)}
                   </Typography>
                   <Typography variant="body2" sx={{ mb: 1 }}>
-                    <strong>Edad:</strong> {calcularEdad(selectedAtleta.fechaNacimiento)} años
+                    <strong>Edad:</strong> {calcularEdad(selectedAtleta.fecha_nacimiento)} años
                   </Typography>
                   <Typography variant="body2" sx={{ mb: 1 }}>
                     <strong>Género:</strong> {selectedAtleta.sexo}

@@ -19,8 +19,8 @@ const EncabezadoAdministrativo = () => {
   useEffect(() => {
     const fetchPerfil = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/perfil-empresa');
-        const data = response.data;
+        const response = await perfilEmpresaAPI.get();
+        const data = response.data.perfil;
 
         console.log('Datos recibidos del backend:', data); // Depuración
 

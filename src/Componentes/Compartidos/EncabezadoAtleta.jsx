@@ -17,19 +17,19 @@ const EncabezadoCliente = () => {
   const { logout } = useAuth(); // Obtén la función logout del contexto
 
   useEffect(() => {
-    const fetchPerfil = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/perfil-empresa');
-        const data = response.data;
-        setNombreEmpresa(data.nombre_empresa || 'Nombre no disponible');
-        setLogoUrl(data.logo || '');
-      } catch (error) {
-        console.error('Error al obtener datos del perfil:', error);
-      }
-    };
+  const fetchPerfil = async () => {
+    try {
+      const response = await perfilEmpresaAPI.get()  // ← usar api.js
+      const data = response.data.perfil              // ← extraer .perfil
+      setNombreEmpresa(data.nombre_empresa || 'Instituto Veracruzano del Deporte')
+      setLogoUrl(data.logo || '')
+    } catch (error) {
+      console.error('Error al obtener datos del perfil:', error)
+    }
+  }
+  fetchPerfil()
+}, [])
 
-    fetchPerfil();
-  }, []);
 
   const handleClick = (option) => {
     setActive(option);

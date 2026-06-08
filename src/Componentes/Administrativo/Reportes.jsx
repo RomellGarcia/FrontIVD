@@ -142,7 +142,7 @@ const Reportes = () => {
       
       return {
         'CURP': atleta?.curp || 'N/A',
-        'FECHA NACIMIENTO': atleta?.fechaNacimiento ? new Date(atleta.fechaNacimiento).toLocaleDateString('es-ES') : 'N/A',
+        'FECHA NACIMIENTO': atleta?.fecha_nacimiento ? new Date(atleta.fecha_nacimiento).toLocaleDateString('es-ES') : 'N/A',
         'NOMBRE ATLETA': atleta ? `${atleta.nombre} ${atleta.apellidopa} ${atleta.apellidoma}` : 'N/A',
         'SEXO': resultado.sexo || 'N/A',
         'CATEGORIA': resultado.categoria || 'N/A',
