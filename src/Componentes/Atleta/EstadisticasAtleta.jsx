@@ -91,7 +91,7 @@ const EstadisticasAtleta = () => {
       
       // Cargar estadísticas detalladas
               // estadisticas por atleta no disponible
-      setEstadisticas(estadisticasRes.data.estadisticas);
+      setEstadisticas({})
       
       // Calcular progreso por disciplinas
       calcularProgresoDisciplinas(resultadosRes.data);
