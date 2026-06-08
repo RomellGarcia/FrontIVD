@@ -9,6 +9,7 @@ import {
   Sports as SportsIcon, Work as WorkIcon, School as SchoolIcon, Person as PersonIcon
 } from '@mui/icons-material';
 import axios from 'axios';
+import { entrenadorAPI } from '../api.js';
 import { useAuth } from '../Componentes/Autenticacion/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -93,7 +94,7 @@ const PaginaPrincipalEntrenador = () => {
       }
 
       // Cargar actividad reciente
-              const activityResponse = await axios.get(`http://localhost:5000/api/entrenador/activity/${user.id}`);
+              const activityResponse = await entrenadorAPI.getActividad();
       setRecentActivity(activityResponse.data);
 
     } catch (error) {

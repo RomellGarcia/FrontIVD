@@ -83,7 +83,7 @@ const GestionResultados = () => {
       setAtletas(atletasRes.data);
 
       // Cargar entrenadores
-      const entrenadoresRes = await axios.get('http://localhost:5000/api/entrenadores/club/0');
+      const entrenadoresRes = { data: { entrenadores: [] } }; // TODO: endpoint de entrenadores global
       setEntrenadores(entrenadoresRes.data);
       
       // Cargar clubes

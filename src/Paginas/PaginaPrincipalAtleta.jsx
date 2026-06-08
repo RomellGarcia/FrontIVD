@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { atletasAPI, clubesAPI, eventosAPI } from '../api.js';
 import Swal from 'sweetalert2';
 import { useAuth } from '../Componentes/Autenticacion/AuthContext';
 import {
@@ -89,15 +90,16 @@ const PaginaPrincipalAtleta = () => {
       console.log('Cargando datos para atleta:', userId);
 
       // Cargar datos del atleta
-              const atletaResponse = await axios.get(`http://localhost:5000/api/atletas/perfil`);
-      console.log('Datos del atleta:', atletaResponse.data);
-      setAtletaData(atletaResponse.data);
+      const atletaResponse = await atletasAPI.getPerfil()
+      const atleta = atletaResponse.data.atleta  // ← extraer .atleta
+      setAtletaData(atleta)
 
       // Cargar clubes disponibles
       try {
-        const clubesResponse = await axios.get('http://localhost:5000/api/clubes');
-        console.log('Clubes cargados:', clubesResponse.data.length);
-        setClubesDisponibles(clubesResponse.data.slice(0, 6));
+        const clubesResponse = await clubesAPI.getAll()
+        console.log('Clubes cargados:', clubesResponse.data.clubes?.length)
+        setClubesDisponibles((clubesResponse.data.clubes || []).slice(0, 6))
+
       } catch (error) {
         console.log('Error al cargar clubes:', error.message);
         setClubesDisponibles([]);
@@ -105,15 +107,14 @@ const PaginaPrincipalAtleta = () => {
 
       // Cargar eventos próximos (convocatorias para el atleta)
       try {
-        const edad = calcularEdad(atletaResponse.data.fechaNacimiento);
-        const genero = atletaResponse.data.sexo?.toLowerCase();
-        
+        const edad = calcularEdad(atleta.fecha_nacimiento)
+        const genero = atleta.genero?.toLowerCase()
+
         console.log('Edad y género del atleta:', { edad, genero });
-        
+
         if (edad && genero) {
-          const eventosResponse = await axios.get(`http://localhost:5000/api/eventos/convocatorias-para-atleta?edad=${edad}&genero=${genero}`);
-          console.log('Eventos próximos cargados:', eventosResponse.data.length);
-          setEventosProximos(eventosResponse.data.slice(0, 4));
+          const eventosResponse = await eventosAPI.getMisConvocatorias()
+          setEventosProximos((eventosResponse.data.convocatorias || []).slice(0, 4))
         } else {
           console.log('No se pudo calcular edad o género');
           setEventosProximos([]);
@@ -125,9 +126,9 @@ const PaginaPrincipalAtleta = () => {
 
       // Cargar eventos en los que participa
       try {
-        const participacionResponse = await axios.get(`http://localhost:5000/api/eventos/mis-inscripciones`);
-        console.log('Participaciones cargadas:', participacionResponse.data.length);
-        setEventosParticipacion(participacionResponse.data.slice(0, 3));
+        const participacionResponse = await eventosAPI.getMisInscripciones()
+        console.log('Participaciones cargadas:', participacionResponse.data.inscripciones?.length)
+        setEventosParticipacion((participacionResponse.data.inscripciones || []).slice(0, 3))
       } catch (error) {
         console.log('Error al cargar participaciones:', error.message);
         setEventosParticipacion([]);
@@ -160,11 +161,11 @@ const PaginaPrincipalAtleta = () => {
     const stats = {
       totalEventos: participaciones.length,
       eventosGanados: participaciones.filter(p => p.resultado === 'ganador').length,
-      sesionesCompletadas: 0, // Ya no se manejan sesiones
-      clubActual: atleta.clubId ? 'Club Asignado' : 'Sin Club'
-    };
-    setEstadisticas(stats);
-  };
+      sesionesCompletadas: 0,
+      clubActual: atleta.club_nombre || 'Sin Club'  // ← club_nombre del JOIN
+    }
+    setEstadisticas(stats)
+  }
 
   const formatearFecha = (fecha) => {
     if (!fecha) return 'Fecha no disponible';
@@ -216,7 +217,7 @@ const PaginaPrincipalAtleta = () => {
           <Button
             variant="contained"
             onClick={cargarDatosAtleta}
-            sx={{ 
+            sx={{
               bgcolor: '#800020',
               '&:hover': { bgcolor: '#600018' }
             }}
@@ -239,7 +240,7 @@ const PaginaPrincipalAtleta = () => {
         `}
       </style>
       <Container maxWidth="xl" sx={{ py: 4, background: '#F5E8C7', minHeight: '100vh' }}>
-        
+
         {/* Header con información del atleta */}
         <Box sx={{ textAlign: 'center', mb: 4 }}>
           <Avatar sx={{ width: 80, height: 80, mx: 'auto', mb: 2, bgcolor: '#800020' }}>
@@ -320,7 +321,7 @@ const PaginaPrincipalAtleta = () => {
                     Clubes Disponibles
                   </Typography>
                 </Box>
-                
+
                 {clubesDisponibles.length === 0 ? (
                   <Typography variant="body2" sx={{ textAlign: 'center', color: '#7A4069' }}>
                     No hay clubes disponibles en este momento.
@@ -328,7 +329,7 @@ const PaginaPrincipalAtleta = () => {
                 ) : (
                   <List>
                     {clubesDisponibles.slice(0, 3).map((club, index) => (
-                      <React.Fragment key={club._id}>
+                      <React.Fragment key={club.id}>
                         <ListItem>
                           <ListItemAvatar>
                             <Avatar sx={{ bgcolor: '#7A4069' }}>
@@ -363,15 +364,15 @@ const PaginaPrincipalAtleta = () => {
                     ))}
                   </List>
                 )}
-                
+
                 {clubesDisponibles.length > 0 && (
                   <Box sx={{ textAlign: 'center', mt: 2 }}>
                     <Button
                       variant="outlined"
                       onClick={handleVerClubes}
                       startIcon={<ViewIcon />}
-                      sx={{ 
-                        borderColor: '#800020', 
+                      sx={{
+                        borderColor: '#800020',
                         color: '#800020',
                         '&:hover': { borderColor: '#600018', backgroundColor: '#F5E8C7' }
                       }}
@@ -394,7 +395,7 @@ const PaginaPrincipalAtleta = () => {
                     Próximos Eventos
                   </Typography>
                 </Box>
-                
+
                 {eventosProximos.length === 0 ? (
                   <Typography variant="body2" sx={{ textAlign: 'center', color: '#7A4069' }}>
                     No hay eventos próximos disponibles para tu categoría.
@@ -402,7 +403,7 @@ const PaginaPrincipalAtleta = () => {
                 ) : (
                   <List>
                     {eventosProximos.map((evento, index) => (
-                      <React.Fragment key={evento._id}>
+                      <React.Fragment key={evento.id}>
                         <ListItem>
                           <ListItemAvatar>
                             <Avatar sx={{ bgcolor: '#7A4069' }}>
@@ -426,8 +427,8 @@ const PaginaPrincipalAtleta = () => {
                                 <Typography variant="body2" sx={{ color: '#7A4069' }}>
                                   🏃 {evento.disciplina} - {evento.categoria}
                                 </Typography>
-                                <Chip 
-                                  label={evento.estado ? 'Abierto' : 'Cerrado'} 
+                                <Chip
+                                  label={evento.estado ? 'Abierto' : 'Cerrado'}
                                   color={evento.estado ? 'success' : 'error'}
                                   size="small"
                                   sx={{ mt: 1 }}
@@ -455,7 +456,7 @@ const PaginaPrincipalAtleta = () => {
                     Mis Participaciones
                   </Typography>
                 </Box>
-                
+
                 {eventosParticipacion.length === 0 ? (
                   <Typography variant="body2" sx={{ textAlign: 'center', color: '#7A4069' }}>
                     No estás participando en ningún evento actualmente.
@@ -463,7 +464,7 @@ const PaginaPrincipalAtleta = () => {
                 ) : (
                   <List>
                     {eventosParticipacion.map((participacion, index) => (
-                      <React.Fragment key={participacion._id}>
+                      <React.Fragment key={participacion.id}>
                         <ListItem>
                           <ListItemAvatar>
                             <Avatar sx={{ bgcolor: '#2E7D32' }}>
@@ -484,8 +485,8 @@ const PaginaPrincipalAtleta = () => {
                                 <Typography variant="body2" sx={{ color: '#7A4069' }}>
                                   🏃 {participacion.evento?.disciplina || 'N/A'}
                                 </Typography>
-                                <Chip 
-                                  label={participacion.validado ? 'Validado' : 'Pendiente'} 
+                                <Chip
+                                  label={participacion.validado ? 'Validado' : 'Pendiente'}
                                   color={participacion.validado ? 'success' : 'warning'}
                                   size="small"
                                   sx={{ mt: 1 }}
@@ -497,8 +498,8 @@ const PaginaPrincipalAtleta = () => {
                             size="small"
                             variant="outlined"
                             startIcon={<ViewIcon />}
-                            sx={{ 
-                              borderColor: '#2E7D32', 
+                            sx={{
+                              borderColor: '#2E7D32',
                               color: '#2E7D32',
                               '&:hover': { borderColor: '#1B5E20', backgroundColor: '#F5E8C7' }
                             }}
@@ -517,10 +518,10 @@ const PaginaPrincipalAtleta = () => {
         </Grid>
 
         {/* Modal de Clubes Disponibles */}
-        <Dialog 
-          open={modalClubesOpen} 
-          onClose={handleCerrarModalClubes} 
-          maxWidth="lg" 
+        <Dialog
+          open={modalClubesOpen}
+          onClose={handleCerrarModalClubes}
+          maxWidth="lg"
           fullWidth
         >
           <DialogTitle>
@@ -550,7 +551,7 @@ const PaginaPrincipalAtleta = () => {
                 </TableHead>
                 <TableBody>
                   {clubesDisponibles.map((club) => (
-                    <TableRow key={club._id}>
+                    <TableRow key={club.id}>
                       <TableCell>
                         <Box display="flex" alignItems="center">
                           <Avatar sx={{ bgcolor: '#7A4069', mr: 2 }}>

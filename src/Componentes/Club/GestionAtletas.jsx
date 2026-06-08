@@ -41,6 +41,7 @@ import {
   FitnessCenter as FitnessCenterIcon
 } from '@mui/icons-material';
 import axios from 'axios';
+import { entrenadoresAPI } from '../../api.js';
 import { useAuth } from '../Autenticacion/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -188,7 +189,7 @@ const GestionAtletas = () => {
     try {
       setLoadingEntrenadores(true);
       console.log('Buscando entrenadores para club:', user.id);
-      const response = await axios.get(`http://localhost:5000/api/entrenadores/club/${user.id}`);
+      const response = await entrenadoresAPI.getByClub(user.id);
       console.log('Entrenadores recibidos:', response.data);
       setEntrenadores(response.data);
     } catch (error) {
@@ -203,7 +204,7 @@ const GestionAtletas = () => {
   const fetchSolicitudesEntrenadores = async () => {
     try {
       console.log('Buscando solicitudes de entrenadores para club:', user.id);
-      const response = await axios.get(`http://localhost:5000/api/entrenadores/solicitudes-club/${user.id}`);
+      const response = await entrenadoresAPI.getSolicitudesByClub(user.id);
       console.log('Solicitudes recibidas:', response.data);
       const solicitudesPendientes = response.data.filter(s => s.estado === 'pendiente');
       console.log('Solicitudes pendientes:', solicitudesPendientes);

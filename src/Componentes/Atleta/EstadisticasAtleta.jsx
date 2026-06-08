@@ -49,6 +49,7 @@ import {
   CalendarToday as CalendarIcon
 } from '@mui/icons-material';
 import axios from 'axios';
+import { atletasAPI, resultadosAPI } from '../../api.js';
 import { useAuth } from '../Autenticacion/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -81,15 +82,15 @@ const EstadisticasAtleta = () => {
       setLoading(true);
       
       // Cargar perfil del atleta
-              const perfilRes = await axios.get(`http://localhost:5000/api/atletas/perfil`);
+              const perfilRes = await atletasAPI.getPerfil();
       setPerfilAtleta(perfilRes.data);
       
       // Cargar resultados del atleta
-              const resultadosRes = await axios.get(`http://localhost:5000/api/resultados/atleta/${user.id}`);
+              const resultadosRes = await resultadosAPI.getByAtleta(user.id);
       setResultados(resultadosRes.data);
       
       // Cargar estadísticas detalladas
-              const estadisticasRes = await axios.get(`http://localhost:5000/api/resultados/estadisticas/atleta/${user.id}`);
+              // estadisticas por atleta no disponible
       setEstadisticas(estadisticasRes.data.estadisticas);
       
       // Calcular progreso por disciplinas

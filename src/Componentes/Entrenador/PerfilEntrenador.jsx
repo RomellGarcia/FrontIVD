@@ -10,6 +10,7 @@ import {
   Save as SaveIcon, Edit as EditIcon
 } from '@mui/icons-material';
 import axios from 'axios';
+import { entrenadorAPI } from '../../api.js';
 import { useAuth } from '../Autenticacion/AuthContext';
 import Swal from 'sweetalert2';
 
@@ -60,7 +61,7 @@ const PerfilEntrenador = () => {
       console.log('Cargando perfil para usuario:', user);
       
       const userId = user._id || user.id;
-      const response = await axios.get(`http://localhost:5000/api/entrenador/perfil/${userId}`);
+      const response = await entrenadorAPI.getPerfil();
       
       console.log('Respuesta del servidor:', response.data);
       

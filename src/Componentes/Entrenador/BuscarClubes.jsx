@@ -9,6 +9,7 @@ import {
   Send as SendIcon, CheckCircle as CheckCircleIcon, Cancel as CancelIcon
 } from '@mui/icons-material';
 import axios from 'axios';
+import { entrenadorAPI, clubesAPI } from '../../api.js';
 import { useAuth } from '../Autenticacion/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -46,7 +47,7 @@ const BuscarClubes = () => {
 
   const cargarSolicitudesEnviadas = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/entrenador/solicitudes/${user.id}`);
+      const response = await entrenadorAPI.getSolicitudes();
       setSolicitudesEnviadas(response.data);
     } catch (error) {
       console.error('Error al cargar solicitudes:', error);
@@ -155,7 +156,7 @@ const BuscarClubes = () => {
             variant="outlined"
             onClick={async () => {
               try {
-                const response = await axios.get('http://localhost:5000/api/entrenadores/test');
+                // endpoint de test eliminado
                 console.log('Test response:', response.data);
                 Swal.fire({
                   icon: 'info',

@@ -1,6 +1,7 @@
 import { perfilEmpresaAPI } from '../../api.js';
 import React, { useState } from 'react';
 import axios from 'axios';
+import { eventosAPI, atletasAPI } from '../../api.js';
 import {
   Box,
   Typography,
@@ -163,7 +164,7 @@ const ConvocatoriasAtleta = () => {
   const fetchInscripciones = async () => {
     try {
       if (!user?.id) return;
-      const response = await axios.get(`http://localhost:5000/api/eventos/mis-inscripciones`);
+      const response = await eventosAPI.getMisInscripciones();
       setYaInscritos(response.data.map(i => i.eventoId));
     } catch (error) {
       setYaInscritos([]);

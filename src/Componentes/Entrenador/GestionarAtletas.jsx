@@ -12,6 +12,7 @@ import {
   TrendingUp as TrendingUpIcon, Sports as SportsIcon
 } from '@mui/icons-material';
 import axios from 'axios';
+import { entrenadorAPI } from '../../api.js';
 import { useAuth } from '../Autenticacion/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,7 +38,7 @@ const GestionarAtletas = () => {
       console.log('Cargando atletas para entrenador:', user.id);
       console.log('Usuario actual:', user);
       
-      const response = await axios.get(`http://localhost:5000/api/entrenador/atletas/${user.id}`);
+      const response = await entrenadorAPI.getAtletas();
       console.log('Respuesta del servidor:', response.data);
       setAtletas(response.data);
     } catch (error) {
