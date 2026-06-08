@@ -38,98 +38,30 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Datos enviados al backend:", { rol, curp, correo, password });
+  e.preventDefault()
+  try {
+    const payload = rol === 'atleta'
+      ? { curp: curp.toUpperCase(), password }  // ← CURP para atletas
+      : { email, password }                      // ← email para los demás
 
-    if (Object.keys(formErrors).length > 0) {
-      MySwal.fire({
-        icon: "error",
-        title: "Errores en el formulario",
-        text: "Por favor, corrige los errores antes de continuar.",
-      });
-      return;
+    const response = await authAPI.login(payload)
+    const { access_token, usuario } = response.data
+
+    login(usuario.email, usuario.rol, { ...usuario, token: access_token })
+
+    const rutas = {
+      atleta:        '/atleta',
+      club:          '/club',
+      entrenador:    '/entrenador',
+      administrador: '/administrador',
     }
-
-    try {
-      let payload;
-      if (rol === "atleta") {
-        payload = { rol, curp, password };
-      } else {
-        payload = { rol, correo, password };
-      }
-
-      const response = await axios.post(`${API_BASE_URL}/api/login`, payload, {
-        withCredentials: true
-      });
-
-      console.log("Respuesta del backend:", response.data);
-      const { message, tipo, user } = response.data;
-
-      if (message === 'Inicio de sesión exitoso') {
-        login(user.curp, tipo, user);
-        let ruta;
-        switch (tipo.toLowerCase()) {
-          case 'atleta':
-            ruta = '/atleta';
-            break;
-          case 'club':
-            ruta = '/club';
-            break;
-          case 'entrenador':
-            ruta = '/entrenador';
-            break;
-          case 'administrador':
-            ruta = '/administrador';
-            break;
-          default:
-            ruta = '/';
-        }
-        navigate(ruta); 
-        MySwal.fire({
-          icon: 'success',
-          title: 'Éxito',
-          text: 'Inicio de sesión exitoso',
-        });
-      }
-    } catch (error) {
-      console.error("Error en el login:", error.response ? error.response.data : error.message);
-      if (error.response) {
-        const { error: serverError } = error.response.data;
-
-        if (serverError === 'Usuario no encontrado') {
-          MySwal.fire({
-            icon: 'error',
-            title: 'Usuario No Encontrado',
-            text: rol === 'atleta' ? 'La CURP ingresada no existe.' : 'El correo ingresado no existe.',
-          });
-        } else if (serverError === 'Rol no válido o no definido') {
-          MySwal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'El rol asociado al usuario no es válido.',
-          });
-        } else if (serverError === 'Usuario o contraseña incorrecta') {
-          MySwal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: serverError,
-          });
-        } else {
-          MySwal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: serverError || 'Error al iniciar sesión. Inténtalo de nuevo.',
-          });
-        }
-      } else {
-        MySwal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Error al iniciar sesión. Inténtalo de nuevo más tarde.',
-        });
-      }
-    }
-  };
+    navigate(rutas[usuario.rol] || '/')
+    MySwal.fire({ icon: 'success', title: 'Éxito', text: 'Inicio de sesión exitoso' })
+  } catch (error) {
+    const msg = error.response?.data?.error || 'Error al iniciar sesión.'
+    MySwal.fire({ icon: 'error', title: 'Error', text: msg })
+  }
+}
 
   const estilos = {
     contenedorPrincipal: {
