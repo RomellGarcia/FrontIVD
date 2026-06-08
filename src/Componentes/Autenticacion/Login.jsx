@@ -3,8 +3,8 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { useAuth } from './AuthContext'; 
-import { FaEye, FaEyeSlash } from 'react-icons/fa';  
+import { useAuth } from './AuthContext';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const MySwal = withReactContent(Swal);
@@ -14,7 +14,7 @@ const API_BASE_URL = "http://localhost:5000";
 
 function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth(); 
+  const { login } = useAuth();
   const [rol, setRol] = useState("atleta");
   const [curp, setCurp] = useState("");
   const [correo, setCorreo] = useState("");
@@ -39,50 +39,52 @@ function Login() {
 
   // Cambia estas líneas en handleSubmit:
 
-const handleSubmit = async (e) => {
-  e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault()
 
-  if (Object.keys(formErrors).length > 0) {
-    MySwal.fire({ icon: 'error', title: 'Errores en el formulario', text: 'Por favor, corrige los errores antes de continuar.' })
-    return
-  }
-
-  try {
-    // Atleta usa CURP, los demás usan correo
-    const payload = rol === 'atleta'
-      ? { curp: curp.toUpperCase(), password }
-      : { email: correo, password }
-
-    const response = await axios.post(`${API_BASE_URL}/api/auth/login`, payload, {
-      withCredentials: true
-    })
-
-    const { access_token, usuario } = response.data
-
-    // Guardar en AuthContext — adaptamos al formato que ya espera tu login()
-    login(usuario.curp || usuario.email, usuario.rol, { ...usuario, token: access_token })
-
-    const rutas = {
-      atleta:        '/atleta',
-      club:          '/club',
-      entrenador:    '/entrenador',
-      administrador: '/administrador',
+    if (Object.keys(formErrors).length > 0) {
+      MySwal.fire({ icon: 'error', title: 'Errores en el formulario', text: 'Por favor, corrige los errores antes de continuar.' })
+      return
     }
-    navigate(rutas[usuario.rol] || '/')
 
-    MySwal.fire({ icon: 'success', title: 'Éxito', text: 'Inicio de sesión exitoso' })
+    try {
+      // Atleta usa CURP, los demás usan correo
+      const payload = rol === 'atleta'
+        ? { curp: curp.toUpperCase(), password }
+        : { email: correo, password }
 
-  } catch (error) {
-    const serverError = error.response?.data?.error
-    if (serverError === 'La CURP ingresada no existe') {
-      MySwal.fire({ icon: 'error', title: 'Usuario No Encontrado', text: 'La CURP ingresada no existe.' })
-    } else if (serverError === 'Credenciales incorrectas') {
-      MySwal.fire({ icon: 'error', title: 'Error', text: 'Contraseña incorrecta.' })
-    } else {
-      MySwal.fire({ icon: 'error', title: 'Error', text: serverError || 'Error al iniciar sesión.' })
+      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, payload, {
+        withCredentials: true
+      })
+
+      const { access_token, usuario } = response.data
+      console.log('access_token:', access_token ? access_token.substring(0, 30) : 'NO EXISTE')
+      console.log('usuario:', usuario)
+
+      // Guardar en AuthContext — adaptamos al formato que ya espera tu login()
+      login(usuario.curp || usuario.email, usuario.rol, { ...usuario, token: access_token })
+
+      const rutas = {
+        atleta: '/atleta',
+        club: '/club',
+        entrenador: '/entrenador',
+        administrador: '/administrador',
+      }
+      navigate(rutas[usuario.rol] || '/')
+
+      MySwal.fire({ icon: 'success', title: 'Éxito', text: 'Inicio de sesión exitoso' })
+
+    } catch (error) {
+      const serverError = error.response?.data?.error
+      if (serverError === 'La CURP ingresada no existe') {
+        MySwal.fire({ icon: 'error', title: 'Usuario No Encontrado', text: 'La CURP ingresada no existe.' })
+      } else if (serverError === 'Credenciales incorrectas') {
+        MySwal.fire({ icon: 'error', title: 'Error', text: 'Contraseña incorrecta.' })
+      } else {
+        MySwal.fire({ icon: 'error', title: 'Error', text: serverError || 'Error al iniciar sesión.' })
+      }
     }
   }
-}
 
   const estilos = {
     contenedorPrincipal: {
@@ -247,7 +249,7 @@ const handleSubmit = async (e) => {
               ¿Olvidaste tu contraseña?
             </Link>
             <Link to="/registro" style={estilos.enlace}>Regístrate</Link>
-           
+
           </form>
         </div>
       </div>
