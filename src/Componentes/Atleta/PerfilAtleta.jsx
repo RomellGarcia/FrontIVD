@@ -53,31 +53,30 @@ const PerfilAtleta = () => {
   }, [user]);
 
   const fetchPerfil = async () => {
-    try {
-      if (!user?.id) return;
-      setLoading(true);
-      const response = await atletasAPI.getById(user.id)
-      const data = response.data.atleta
-      if (data) {
-        // Mapear campos nuevos a los que espera el JSX
-        setPerfil({
-          ...data,
-          apellidopa: data.apellido_paterno,
-          apellidoma: data.apellido_materno,
-          fechaNacimiento: data.fecha_nacimiento,
-          estadoNacimiento: data.estado_nacimiento,
-          gmail: data.email,
-          clubId: data.club_id,
-        })
-        setErrorMessage('')
-      }
-    } catch (error) {
-      console.error('Error al cargar perfil:', error)
-      setErrorMessage('Error al cargar el perfil.')
-    } finally {
-      setLoading(false)
+  try {
+    if (!user?.id) return;
+    setLoading(true);
+    const response = await atletasAPI.getPerfil()
+    const data = response.data.atleta
+    if (data) {
+      setPerfil({
+        ...data,
+        apellidopa: data.apellido_paterno,
+        apellidoma: data.apellido_materno,
+        fechaNacimiento: data.fecha_nacimiento,
+        estadoNacimiento: data.estado_nacimiento,
+        gmail: data.email,
+        club_id: data.club_id,
+      })
+      setErrorMessage('')
     }
+  } catch (error) {
+    console.error('Error al cargar perfil:', error)
+    setErrorMessage('Error al cargar el perfil.')
+  } finally {
+    setLoading(false)
   }
+}
 
   const fetchClubes = async () => {
     try {
