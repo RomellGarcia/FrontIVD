@@ -70,7 +70,7 @@ const PaginaPrincipalAdministrativa = () => {
       
       // Cargar estadísticas generales
       const [atletasRes, clubesRes, eventosRes, resultadosRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/registros?rol=atleta'),
+        axios.get('http://localhost:5000/api/atletas'),
                   axios.get('http://localhost:5000/api/clubes'),
                   axios.get('http://localhost:5000/api/eventos'),
                   axios.get('http://localhost:5000/api/resultados')

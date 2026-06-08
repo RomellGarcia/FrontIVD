@@ -69,7 +69,7 @@ const GestionarAtletas = () => {
     try {
       setLoading(true);
       const [atletasRes, clubesRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/registros?rol=atleta'),
+        axios.get('http://localhost:5000/api/atletas'),
                   axios.get('http://localhost:5000/api/clubes')
       ]);
       setAtletas(atletasRes.data);
@@ -90,7 +90,7 @@ const GestionarAtletas = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-              await axios.delete(`http://localhost:5000/api/registros/${atletaToDelete._id}`);
+              await axios.delete(`http://localhost:5000/api/atletas/${atletaToDelete.id}`);
       setSuccess('Atleta eliminado correctamente');
       setOpenDeleteModal(false);
       setAtletaToDelete(null);
@@ -114,7 +114,7 @@ const GestionarAtletas = () => {
   const handleExpulsarConfirm = async () => {
     try {
       // Solo enviar clubId: null para desasociar, sin otros campos
-              await axios.put(`http://localhost:5000/api/registros/atleta/${atletaToExpulsar._id}`, {
+              await axios.put(`http://localhost:5000/api/atletas/${atletaToExpulsar.id}/club`, {
         clubId: null
       });
       setSuccess('Atleta expulsado correctamente del club. Ahora es independiente.');

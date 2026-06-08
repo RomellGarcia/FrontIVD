@@ -75,7 +75,7 @@ const GestionAtletas = () => {
   const fetchAtletas = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:5000/api/registros/atletas-club?clubId=${user.id}`);
+      const response = await axios.get(`http://localhost:5000/api/atletas?club_id=${user.id}`);
       setAtletas(response.data);
       setError('');
     } catch (error) {
@@ -89,7 +89,7 @@ const GestionAtletas = () => {
   const fetchSolicitudes = async () => {
     try {
       setLoadingSolicitudes(true);
-      const response = await axios.get(`http://localhost:5000/api/registros/solicitudes-club?clubId=${user.id}`);
+      const response = await axios.get(`http://localhost:5000/api/atletas/solicitudes-club?clubId=${user.id}`);
       const solicitudesPendientes = response.data.filter(s => s.estado === 'pendiente');
       setSolicitudes(solicitudesPendientes);
     } catch (error) {
@@ -102,7 +102,7 @@ const GestionAtletas = () => {
 
   const handleAceptarSolicitud = async (solicitudId) => {
     try {
-              await axios.put(`http://localhost:5000/api/registros/solicitudes-club/${solicitudId}`, { estado: 'aceptada' });
+              await axios.put(`http://localhost:5000/api/atletas/solicitudes-club/${solicitudId}`, { estado: 'aceptada' });
       setError('');
       fetchSolicitudes();
       fetchAtletas();
@@ -114,7 +114,7 @@ const GestionAtletas = () => {
 
   const handleRechazarSolicitud = async (solicitudId) => {
     try {
-              await axios.put(`http://localhost:5000/api/registros/solicitudes-club/${solicitudId}`, { estado: 'rechazada' });
+              await axios.put(`http://localhost:5000/api/atletas/solicitudes-club/${solicitudId}`, { estado: 'rechazada' });
       setError('');
       fetchSolicitudes();
     } catch (error) {
@@ -136,7 +136,7 @@ const GestionAtletas = () => {
   const confirmarExpulsion = async () => {
     try {
       // Desasociar atleta del club (quitar clubId)
-              await axios.put(`http://localhost:5000/api/registros/${atletaAExpulsar._id}`, {
+              await axios.put(`http://localhost:5000/api/atletas/${atletaAExpulsar.id}/club`, {
         clubId: null
       });
       
@@ -250,7 +250,7 @@ const GestionAtletas = () => {
   const confirmarExpulsionEntrenador = async () => {
     try {
       // Desasociar entrenador del club (quitar clubId)
-      await axios.put(`http://localhost:5000/api/registros/${entrenadorAExpulsar._id}`, {
+      await axios.put(`http://localhost:5000/api/auth/register/${entrenadorAExpulsar._id}`, {
         clubId: null
       });
       

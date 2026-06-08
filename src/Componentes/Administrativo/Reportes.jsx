@@ -57,7 +57,7 @@ const Reportes = () => {
       setEventos(eventosRes.data);
       
       // Cargar atletas
-      const atletasRes = await axios.get('http://localhost:5000/api/registros?rol=atleta');
+      const atletasRes = await axios.get('http://localhost:5000/api/atletas');
       setAtletas(atletasRes.data);
       
       // Cargar clubes

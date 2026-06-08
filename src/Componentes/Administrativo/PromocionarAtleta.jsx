@@ -94,7 +94,7 @@ const PromocionarAtleta = () => {
     try {
       setLoading(true);
       const [entrenadoresRes, clubesRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/registros?rol=entrenador'),
+        axios.get('http://localhost:5000/api/entrenadores/club/0'),
                   axios.get('http://localhost:5000/api/clubes')
       ]);
       setEntrenadores(entrenadoresRes.data);

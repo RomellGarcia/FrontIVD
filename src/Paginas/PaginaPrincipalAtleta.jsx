@@ -89,13 +89,13 @@ const PaginaPrincipalAtleta = () => {
       console.log('Cargando datos para atleta:', userId);
 
       // Cargar datos del atleta
-              const atletaResponse = await axios.get(`http://localhost:5000/api/registros/atleta/${userId}`);
+              const atletaResponse = await axios.get(`http://localhost:5000/api/atletas/perfil`);
       console.log('Datos del atleta:', atletaResponse.data);
       setAtletaData(atletaResponse.data);
 
       // Cargar clubes disponibles
       try {
-        const clubesResponse = await axios.get('http://localhost:5000/api/registros/clubes');
+        const clubesResponse = await axios.get('http://localhost:5000/api/clubes');
         console.log('Clubes cargados:', clubesResponse.data.length);
         setClubesDisponibles(clubesResponse.data.slice(0, 6));
       } catch (error) {

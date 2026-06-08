@@ -65,7 +65,7 @@ const PaginaPrincipalEntrenador = () => {
         
         // Cargar atletas del club asignado
         try {
-          const atletasResponse = await axios.get(`http://localhost:5000/api/registros/atletas-club?clubId=${user.clubId}`);
+          const atletasResponse = await axios.get(`http://localhost:5000/api/atletas?club_id=${user.clubId}`);
           setAtletasClub(atletasResponse.data);
           // Contar atletas activos (que tengan estado activo o similar)
           const atletasActivos = atletasResponse.data.filter(atleta => 

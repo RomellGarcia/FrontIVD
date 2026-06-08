@@ -136,12 +136,12 @@ const PerfilAtleta = () => {
     try {
       if (!user?.id) return;
       if (solicitudIndependiente) {
-        await axios.post('http://localhost:5000/api/registros/solicitudes-club', {
+        await axios.post('http://localhost:5000/api/atletas/solicitudes-club', {
           atletaId: user.id,
           tipo: 'independiente',
         });
       } else if (solicitudClubId) {
-        await axios.post('http://localhost:5000/api/registros/solicitudes-club', {
+        await axios.post('http://localhost:5000/api/atletas/solicitudes-club', {
           atletaId: user.id,
           clubId: solicitudClubId,
           tipo: 'asociar',
@@ -414,7 +414,7 @@ const PerfilAtleta = () => {
                     limpiarMensaje(); // Limpiar mensajes anteriores
                     setMensaje(''); // Limpiar mensaje de info
 
-                    await axios.post('http://localhost:5000/api/registros/solicitudes-club', {
+                    await axios.post('http://localhost:5000/api/atletas/solicitudes-club', {
                       atletaId: user.id,
                       clubId: clubSeleccionado,
                       tipo: 'asociar',

@@ -143,7 +143,7 @@ function Registro() {
   useEffect(() => {
     if (formData.rol === "atleta") {
       axios
-        .get(`${API_BASE_URL}/api/registros/clubes`)
+        .get(`${API_BASE_URL}/api/clubes`)
         .then((res) => setClubes(res.data))
         .catch(() => setClubes([]));
     }
@@ -345,7 +345,7 @@ function Registro() {
     }
 
     let dataToSend;
-    let endpoint = `${API_BASE_URL}/api/registros`;
+    let endpoint = `${API_BASE_URL}/api/auth/register`;
     if (formData.rol === "club") {
       // Solo enviar los datos relevantes para club
       dataToSend = {
@@ -388,7 +388,7 @@ function Registro() {
       if (formData.rol === "atleta" && !formData.esIndependiente && formData.clubId) {
         // Buscar el id del atleta recién creado
         const atletaId = response.data.usuario._id;
-        await axios.post(`${API_BASE_URL}/api/registros/solicitudes-club`, {
+        await axios.post(`${API_BASE_URL}/api/atletas/solicitudes-club`, {
           atletaId,
           clubId: formData.clubId,
           tipo: 'asociar',

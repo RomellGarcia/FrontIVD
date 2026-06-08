@@ -186,7 +186,7 @@ const RegistroEntrenador = () => {
         delete entrenadorData.clubId;
       }
 
-              await axios.post('http://localhost:5000/api/registros', entrenadorData);
+              await axios.post('http://localhost:5000/api/auth/register', entrenadorData);
       
       setSuccess('Entrenador registrado correctamente');
       setTimeout(() => {

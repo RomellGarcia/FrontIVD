@@ -177,7 +177,7 @@ const GestionClubes = () => {
 
   const cargarAtletasClub = async (clubId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/registros/atletas-club?clubId=${clubId}`);
+      const response = await axios.get(`http://localhost:5000/api/atletas?club_id=${clubId}`);
       setAtletasClub(response.data);
     } catch (error) {
       console.error('Error al cargar atletas del club:', error);

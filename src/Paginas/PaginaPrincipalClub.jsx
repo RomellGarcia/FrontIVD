@@ -68,7 +68,7 @@ const PaginaPrincipalClub = () => {
       setClub(clubRes.data);
       
       // Cargar atletas recién ingresados (últimos 5)
-              const atletasRes = await axios.get(`http://localhost:5000/api/registros/atletas-club?clubId=${user.id}&limit=5&sort=createdAt`);
+              const atletasRes = await axios.get(`http://localhost:5000/api/atletas?club_id=${user.id}&limit=5&sort=createdAt`);
       setAtletasRecientes(atletasRes.data);
       
       // Cargar eventos recientes (últimos 5)

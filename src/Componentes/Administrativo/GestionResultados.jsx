@@ -79,11 +79,11 @@ const GestionResultados = () => {
       setResultados(resultadosRes.data);
       
       // Cargar atletas
-      const atletasRes = await axios.get('http://localhost:5000/api/registros?rol=atleta');
+      const atletasRes = await axios.get('http://localhost:5000/api/atletas');
       setAtletas(atletasRes.data);
 
       // Cargar entrenadores
-      const entrenadoresRes = await axios.get('http://localhost:5000/api/registros?rol=entrenador');
+      const entrenadoresRes = await axios.get('http://localhost:5000/api/entrenadores/club/0');
       setEntrenadores(entrenadoresRes.data);
       
       // Cargar clubes

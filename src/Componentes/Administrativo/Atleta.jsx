@@ -59,7 +59,7 @@ const GestionAtletas = () => {
 
   const fetchAtletas = async () => {
     try {
-      let url = 'http://localhost:5000/api/registros/atletas';
+      let url = 'http://localhost:5000/api/atletas';
       if (verIndependientes) {
         url += '?independientes=true';
       } else if (filtroClub) {
@@ -76,7 +76,7 @@ const GestionAtletas = () => {
 
   const fetchClubes = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/registros/clubes');
+      const response = await axios.get('http://localhost:5000/api/clubes');
       setClubes(response.data);
     } catch (error) {
       console.error('Error al obtener clubes:', error);

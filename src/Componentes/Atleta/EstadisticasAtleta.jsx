@@ -81,7 +81,7 @@ const EstadisticasAtleta = () => {
       setLoading(true);
       
       // Cargar perfil del atleta
-              const perfilRes = await axios.get(`http://localhost:5000/api/registros/atleta/${user.id}`);
+              const perfilRes = await axios.get(`http://localhost:5000/api/atletas/perfil`);
       setPerfilAtleta(perfilRes.data);
       
       // Cargar resultados del atleta
