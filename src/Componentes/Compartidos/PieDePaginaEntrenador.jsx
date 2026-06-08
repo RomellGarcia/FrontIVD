@@ -47,17 +47,17 @@ const PieDePaginaEntrenador = () => {
         const response = await axios.get(`${API_BASE_URL}/api/perfil-empresa`);
         console.log('Datos del perfil recibidos:', response.data);
         setDatosEmpresa({
-          facebook: response.data.facebook || '',
-          twitter: response.data.twitter || '',
-          instagram: response.data.instagram || '',
-          telefono: response.data.telefono || '',
-          correo: response.data.correo || '',
-          direccion: response.data.direccion || '',
-          mostrarWhatsapp: response.data.mostrarWhatsapp || true,
+          facebook: response.data.perfil.redes_sociales?.find(r => r.plataforma === 'facebook')?.url || '',
+          twitter: response.data.perfil.redes_sociales?.find(r => r.plataforma === 'twitter')?.url || '',
+          instagram: response.data.perfil.redes_sociales?.find(r => r.plataforma === 'instagram')?.url || '',
+          telefono: response.data.perfil.telefono || '',
+          correo: response.data.perfil.correo || '',
+          direccion: response.data.perfil.direccion || '',
+          mostrarWhatsapp: response.data.perfil.mostrar_whatsapp || true,
         });
 
-        if (response.data.direccion && mapRef.current) {
-          initializeOrUpdateMap(response.data.direccion);
+        if (response.data.perfil.direccion && mapRef.current) {
+          initializeOrUpdateMap(response.data.perfil.direccion);
         }
       } catch (err) {
         console.error('Error fetching perfil:', err);
