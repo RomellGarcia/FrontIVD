@@ -125,7 +125,7 @@ const PaginaPrincipalAtleta = () => {
 
       // Cargar eventos en los que participa
       try {
-        const participacionResponse = await axios.get(`http://localhost:5000/api/eventos/inscripciones?atletaId=${userId}`);
+        const participacionResponse = await axios.get(`http://localhost:5000/api/eventos/mis-inscripciones`);
         console.log('Participaciones cargadas:', participacionResponse.data.length);
         setEventosParticipacion(participacionResponse.data.slice(0, 3));
       } catch (error) {

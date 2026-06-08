@@ -163,7 +163,7 @@ const ConvocatoriasAtleta = () => {
   const fetchInscripciones = async () => {
     try {
       if (!user?.id) return;
-      const response = await axios.get(`http://localhost:5000/api/eventos/inscripciones?atletaId=${user.id}`);
+      const response = await axios.get(`http://localhost:5000/api/eventos/mis-inscripciones`);
       setYaInscritos(response.data.map(i => i.eventoId));
     } catch (error) {
       setYaInscritos([]);

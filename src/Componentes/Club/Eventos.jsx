@@ -99,7 +99,7 @@ const Eventos = () => {
     setLoadingParticipantes(true);
     try {
       // Obtener participantes del club en esta convocatoria específica
-              const response = await axios.get(`http://localhost:5000/api/eventos/inscripciones?eventoId=${evento._id}&convocatoriaIndex=${index}&clubId=${user.id}`);
+              const response = await axios.get(`http://localhost:5000/api/eventos/${evento.id}/participantes&convocatoriaIndex=${index}&clubId=${user.id}`);
       setParticipantesClub(response.data);
     } catch (error) {
       console.error('Error al cargar participantes:', error);

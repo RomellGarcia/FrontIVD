@@ -74,7 +74,7 @@ const EventosEntrenador = () => {
     setModalParticipantesOpen(true);
     setLoadingParticipantes(true);
     try {
-              const response = await axios.get(`http://localhost:5000/api/eventos/inscripciones?eventoId=${evento._id}&convocatoriaIndex=${index}`);
+              const response = await axios.get(`http://localhost:5000/api/eventos/${evento.id}/participantes&convocatoriaIndex=${index}`);
       setParticipantes(response.data);
     } catch (error) {
       setParticipantes([]);
